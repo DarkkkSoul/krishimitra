@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.text-istok-bold {
+   font-family: "Istok Web", sans-serif;
+   font-weight: 700;
+   font-style: normal;
+}
+
+.text-telugu {
+   font-family: "Anek Telugu", sans-serif;
+   font-optical-sizing: auto;
+   font-weight: 700;
+   font-style: normal;
+   font-variation-settings:
+      "wdth" 100;
+}
+
+.text-telugu-thin {
+   font-family: "Anek Telugu", sans-serif;
+   font-optical-sizing: auto;
+   font-weight: 500;
+   font-style: normal;
+   font-variation-settings:
+      "wdth" 100;
+}
