@@ -8,6 +8,9 @@ function App() {
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
   const [generatingAnswer, setGeneratingAnswer] = useState(false);
+  const [recommendedCrops, setRecommendedCrops] = useState("");
+  const [nitrogen, setNitrogen] = useState("");
+  const [phosphorus, setPhosphorus] = useState("");
 
   const chatContainerRef = useRef(null);
 
@@ -16,6 +19,39 @@ function App() {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
   }, [chatHistory, generatingAnswer]);
+
+  const features = {
+    Nitrogen: Number(nitrogen),
+    Phosporus: Number(phosphorus), // spelling must match backend: "Phosporus"
+    Potassium: 0,
+    Temperature: 0,
+    Humidity: 0,
+    pH: 7,
+    Rainfall: 0,
+  };
+
+  async function getDataFromModel(features) {
+    const res = await fetch("http://127.0.0.1:5000/api/predict", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(features)
+    })
+
+    if (res.ok) {
+      const data = await res.json();
+
+      const recommendedCrops = data.prediction.crop;
+      console.log(data);
+
+      setRecommendedCrops(recommendedCrops || "");
+
+      return data;
+    } else {
+      throw new Error(res.error || `API failed with ${res.status}`);
+    }
+  }
 
   async function generateAnswer(e) {
     e.preventDefault();
@@ -27,19 +63,18 @@ function App() {
 
     setChatHistory(prev => [...prev, { type: 'question', content: currentQuestion }]);
 
-    const recommendedCrops = "Wheat and Corn";
-    const nitrogen = "50%";
-    const phosphorus = "30%";
+    const rec = await getDataFromModel(features);
+    const recommended = rec?.prediction?.crop || "Unknown";
+    const nForPrompt = nitrogen || rec.inputs.Nitrogen;
+    const pForPrompt = phosphorus || rec.inputs.Phosporus;
 
     const fullPrompt = `You are an AI-powered agricultural assistant for farmers. Your primary function is to provide crop recommendations and agricultural advice. When given data about soil composition, analyze it and recommend suitable crops. Maintain a helpful, informative, and professional tone. Answer any general agricultural questions the user may have, but prioritize the data-driven recommendations.
-
 Here is the soil data:
-- Nitrogen: ${nitrogen}
-- Phosphorus: ${phosphorus}
-The recommended crops are: ${recommendedCrops}.
-
+- Nitrogen: ${nForPrompt}
+- Phosphorus: ${pForPrompt}
+The recommended crops are: ${recommended}.
 Now, please answer the user's question:
-${question}`;
+${currentQuestion}`;
 
     try {
       const response = await axios({
@@ -66,11 +101,38 @@ ${question}`;
   return (
     <div className="fixed inset-0 bg-gradient-to-r from-green-500/70 to-green-900/80">
       <div className="h-full max-w-4xl mx-auto flex flex-col p-3">
+
         <header className="text-center py-2">
-          <h1 className="text-4xl font-bold text-left text-white transition-colors text-telugu tracking-wider">
-            <span className="text-green-900">Agri</span>Help
+          <h1 className="text-4xl font-bold text-left text-white transition-colors text-telugu tracking-wide">
+            <span className="text-green-900">Krishi</span>Mitra
           </h1>
         </header>
+
+        <div className="flex gap-3 mb-3">
+          <div className="flex flex-col">
+            <label className="text-white text-sm mb-1">Nitrogen (N)</label>
+            <input
+              type="number"
+              step="1"
+              placeholder="e.g. 90"
+              value={nitrogen}
+              onChange={(e) => setNitrogen(e.target.value)}
+              className="border p-2 rounded"
+            />
+          </div>
+
+          <div className="flex flex-col">
+            <label className="text-white text-sm mb-1">Phosphorus (P)</label>
+            <input
+              type="number"
+              step="1"
+              placeholder="e.g. 42"
+              value={phosphorus}
+              onChange={(e) => setPhosphorus(e.target.value)}
+              className="border p-2 rounded"
+            />
+          </div>
+        </div>
 
         <div
           ref={chatContainerRef}
@@ -80,7 +142,7 @@ ${question}`;
             (
               <div className="h-full flex items-center justify-center text-center p-6">
                 <div className="bg-green-300/ rounded-xl p-8 max-w-2xl text-telugu-thin flex flex-col gap-2">
-                  <h2 className="text-3xl font-black text-white">Welcome to AgriHelp</h2>
+                  <h2 className="text-3xl font-black text-white">Welcome to KrishiMitra</h2>
                   <p className="text-white">
                     I'm here to help you with anything related to agriculture.
                   </p>
@@ -122,7 +184,7 @@ ${question}`;
               placeholder="Ask anything..."
               rows="2"
               onKeyDown={(e) => {
-                if (e.key = 2 == 'Enter' && !e.shiftKey) {
+                if (e.key === 'Enter' && !e.shiftKey) {
                   e.preventDefault();
                   generateAnswer(e);
                 }
