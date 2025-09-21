@@ -23,6 +23,7 @@ function Form() {
         e.preventDefault();
         const data = await getDataFromModel(proportions);
 
+
         setRecommendedCrop(data?.prediction?.crop || "Unknown");
         setNitrogen(data.inputs.Nitrogen);
         setPhosphorus(data.inputs.Phosporus);
@@ -35,7 +36,7 @@ function Form() {
     return (
         <form
             onSubmit={(e) => { handleSubmit(e) }}
-            className="flex flex-col gap-6 bg-green-100/40 shadow-2xl shadow-amber-200/80 p-6 rounded-2xl shadow-lg max-w-md w-full"
+            className="flex flex-col gap-6 bg-green-100/40 shadow-2xl shadow-amber-200/80 p-6 rounded-2xl max-w-md w-full"
         >
             <h2 className="text-3xl text-istok-bold font-bold text-green-900 text-center mb-2">
                 Input soil proportions

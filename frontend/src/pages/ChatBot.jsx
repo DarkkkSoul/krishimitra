@@ -14,7 +14,6 @@ function ChatBot() {
 
     const { recommendedCrop, nitrogen, phosphorus } = useContext(ProportionsContext);
 
-
     useEffect(() => {
         if (chatContainerRef.current) {
             chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
@@ -30,7 +29,7 @@ function ChatBot() {
             setChatHistory(prev => [...prev, { type: 'question', content: currentQuestion }]);
             setGeneratingAnswer(true);
 
-            console.log(recommendedCrop, nitrogen, phosphorus);
+            console.log('recommendedCrop', recommendedCrop);
 
             const aiResponse = await generateAnswer(currentQuestion, recommendedCrop, nitrogen, phosphorus);
 
