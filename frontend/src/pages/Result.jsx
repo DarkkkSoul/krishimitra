@@ -1,6 +1,7 @@
 import React, { useContext } from 'react'
 import { ProportionsContext } from '../utils/Contexts/ProportionsContext.jsx';
 import { Link } from 'react-router-dom';
+import Header from '../components/Utils/Header';
 
 function Result() {
     const { recommendedCrop, nitrogen, phosphorus } = useContext(ProportionsContext);
@@ -14,13 +15,9 @@ function Result() {
 
     return (
         <div className="fixed inset-0 bg-gradient-to-r from-green-500/70 to-green-900/80 overflow-y-auto">
-            <div className="min-h-full max-w-4xl mx-auto flex flex-col p-4 sm:p-6 lg:p-8">
+            <div className="min-h-full max-w-4xl mx-auto flex flex-col p-4 sm:p-6 lg:p-2">
 
-                <header className="py-2 mb-2">
-                    <h1 className="text-4xl font-bold text-left text-white tracking-wide">
-                        <span className="text-green-900">Krishi</span>Mitra
-                    </h1>
-                </header>
+                <Header />
 
                 <main className="flex-1">
                     {/* Report Card */}

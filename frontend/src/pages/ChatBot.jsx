@@ -1,6 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react'
-import axios from "axios";
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import ReactMarkdown from "react-markdown";
+import { generateAnswer } from '../utils/APIcalls/generateAnswer.js';
+import { ProportionsContext } from '../utils/Contexts/ProportionsContext.jsx';
+import Header from '../components/Utils/Header';
 
 function ChatBot() {
 
@@ -10,68 +12,44 @@ function ChatBot() {
     const [answer, setAnswer] = useState("");
     const [generatingAnswer, setGeneratingAnswer] = useState(false);
 
+    const { recommendedCrop, nitrogen, phosphorus } = useContext(ProportionsContext);
+
+
     useEffect(() => {
         if (chatContainerRef.current) {
             chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
         }
     }, [chatHistory, generatingAnswer]);
 
-    async function generateAnswer(e) {
+
+    const handleSubmit = async (e, question) => {
         e.preventDefault();
-        if (!question.trim()) return;
-
-        setGeneratingAnswer(true);
-        const currentQuestion = question;
-        setQuestion("");
-
-        setChatHistory(prev => [...prev, { type: 'question', content: currentQuestion }]);
-
-        // here think about proportions.
-
-        const data = await getDataFromModel(proportions);
-        const recommended = rec?.prediction?.crop || "Unknown";
-        const nitrogen = rec.inputs.Nitrogen;
-        const phosphorus = rec.inputs.Phosporus;
-
-        const fullPrompt = `You are an AI-powered agricultural assistant for farmers. Your primary function is to provide crop recommendations and agricultural advice. When given data about soil composition, analyze it and recommend suitable crops. Maintain a helpful, informative, and professional tone. Answer any general agricultural questions the user may have, but prioritize the data-driven recommendations.
-    Here is the soil data:
-    - Nitrogen: ${nitrogen}
-    - Phosphorus: ${phosphorus}
-    The recommended crops are: ${recommended}.
-    Now, please answer the user's question:
-    ${currentQuestion}`;
-
         try {
-            const response = await axios({
-                url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${import.meta.env.VITE_API_GENERATIVE_LANGUAGE_CLIENT}`,
-                method: "post",
-                data: {
-                    contents: [{
-                        role: "user",
-                        parts: [{ text: fullPrompt }]
-                    }],
-                },
-            });
+            const currentQuestion = question;
 
-            const aiResponse = response["data"]["candidates"][0]["content"]["parts"][0]["text"];
-            setChatHistory(prev => [...prev, { type: 'answer', content: aiResponse }]);
+            setChatHistory(prev => [...prev, { type: 'question', content: currentQuestion }]);
+            setGeneratingAnswer(true);
+
+            console.log(recommendedCrop, nitrogen, phosphorus);
+
+            const aiResponse = await generateAnswer(currentQuestion, recommendedCrop, nitrogen, phosphorus);
+
             setAnswer(aiResponse);
+            setChatHistory(prev => [...prev, { type: 'answer', content: aiResponse }]);
+
+            setGeneratingAnswer(false);
+            setQuestion('');
         } catch (error) {
             console.log(error);
             setAnswer("Sorry - Something went wrong. Please try again!");
         }
-        setGeneratingAnswer(false);
     }
 
     return (
         <div className="fixed inset-0 bg-gradient-to-r from-green-500/70 to-green-900/80">
             <div className="h-full max-w-4xl mx-auto flex flex-col p-3">
 
-                <header className="text-center py-2">
-                    <h1 className="text-4xl font-bold text-left text-white transition-colors text-telugu tracking-wide">
-                        <span className="text-green-900">Krishi</span>Mitra
-                    </h1>
-                </header>
+                <Header />
 
                 <div
                     ref={chatContainerRef}
@@ -113,7 +91,7 @@ function ChatBot() {
                     )}
                 </div>
 
-                <form onSubmit={generateAnswer} className="bg-green-100/40 rounded-lg shadow-xl shadow-amber-300/40 border border-amber-700/50 p-4">
+                <form onSubmit={(e) => { handleSubmit(e, question) }} className="bg-green-100/40 rounded-lg shadow-xl shadow-amber-300/40 border border-amber-700/50 p-4">
                     <div className="flex gap-3">
                         <textarea
                             required
