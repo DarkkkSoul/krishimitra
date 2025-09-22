@@ -6,27 +6,33 @@ import { useNavigate } from 'react-router-dom';
 
 function Form() {
 
-    const { setRecommendedCrop, nitrogen, setNitrogen, phosphorus, setPhosphorus } = useContext(ProportionsContext);
+    const { recommendedCrop, setRecommendedCrop, nitrogen, setNitrogen, phosphorus, setPhosphorus, potassium, setPotassium, temperature, setTemperature, humidity, setHumidity, pH, setpH, rainfall, setRainfall } = useContext(ProportionsContext);
     const navigate = useNavigate();
 
     const proportions = {
         Nitrogen: Number(nitrogen),
         Phosporus: Number(phosphorus), // DON'T CHANGE PHOSPORUS SPELLING
-        Potassium: 0,
-        Temperature: 0,
-        Humidity: 0,
-        pH: 7,
-        Rainfall: 0,
+        Potassium: Number(potassium),
+        Temperature: Number(temperature),
+        Humidity: Number(humidity),
+        pH: Number(pH),
+        Rainfall: Number(rainfall),
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         const data = await getDataFromModel(proportions);
 
-
-        setRecommendedCrop(data?.prediction?.crop || "Unknown");
+        setRecommendedCrop(data?.prediction?.top3 || "Unknown");
         setNitrogen(data.inputs.Nitrogen);
         setPhosphorus(data.inputs.Phosporus);
+        setPotassium(data.inputs.Potassium);
+        setTemperature(data.inputs.Temperature);
+        setHumidity(data.inputs.Humidity);
+        setpH(data.inputs.pH);
+        setRainfall(data.inputs.Rainfall);
+
+        console.log(recommendedCrop);
 
         setTimeout(() => {
             navigate('/result');
@@ -67,6 +73,72 @@ function Form() {
                         placeholder="e.g. 42"
                         value={phosphorus}
                         onChange={(e) => setPhosphorus(e.target.value)}
+                        className="border bg-green-100/40 text-green-900 px-3 pt-3 pb-2 rounded-xl focus:ring-1 focus:ring-amber-200 focus:shadow-lg focus:shadow-amber-200 outline-none transition"
+                    />
+                </div>
+
+                <div className="flex flex-col flex-1">
+                    <label className="text-green-900 mb-2 text-md">
+                        Humidity (H)
+                    </label>
+                    <input
+                        type="number"
+                        step="1"
+                        placeholder="e.g. 42"
+                        value={humidity}
+                        onChange={(e) => setHumidity(e.target.value)}
+                        className="border bg-green-100/40 text-green-900 px-3 pt-3 pb-2 rounded-xl focus:ring-1 focus:ring-amber-200 focus:shadow-lg focus:shadow-amber-200 outline-none transition"
+                    />
+                </div>
+                <div className="flex flex-col flex-1">
+                    <label className="text-green-900 mb-2 text-md">
+                        Potassium (K)
+                    </label>
+                    <input
+                        type="number"
+                        step="1"
+                        placeholder="e.g. 42"
+                        value={potassium}
+                        onChange={(e) => setPotassium(e.target.value)}
+                        className="border bg-green-100/40 text-green-900 px-3 pt-3 pb-2 rounded-xl focus:ring-1 focus:ring-amber-200 focus:shadow-lg focus:shadow-amber-200 outline-none transition"
+                    />
+                </div>
+                <div className="flex flex-col flex-1">
+                    <label className="text-green-900 mb-2 text-md">
+                        Rainfall
+                    </label>
+                    <input
+                        type="number"
+                        step="1"
+                        placeholder="e.g. 42"
+                        value={rainfall}
+                        onChange={(e) => setRainfall(e.target.value)}
+                        className="border bg-green-100/40 text-green-900 px-3 pt-3 pb-2 rounded-xl focus:ring-1 focus:ring-amber-200 focus:shadow-lg focus:shadow-amber-200 outline-none transition"
+                    />
+                </div>
+                <div className="flex flex-col flex-1">
+                    <label className="text-green-900 mb-2 text-md">
+                        Temperature (T)
+                    </label>
+                    <input
+                        type="number"
+                        step="1"
+                        placeholder="e.g. 42"
+                        value={temperature}
+                        onChange={(e) => setTemperature(e.target.value)}
+                        className="border bg-green-100/40 text-green-900 px-3 pt-3 pb-2 rounded-xl focus:ring-1 focus:ring-amber-200 focus:shadow-lg focus:shadow-amber-200 outline-none transition"
+                    />
+                </div>
+                <div className="flex flex-col flex-1">
+                    <label className="text-green-900 mb-2 text-md">
+                        pH
+                    </label>
+                    <input
+                        type="number"
+                        step="1"
+                        placeholder="e.g. 42"
+                        value={pH}
+                        onChange={(e) => setpH(e.target.value)}
                         className="border bg-green-100/40 text-green-900 px-3 pt-3 pb-2 rounded-xl focus:ring-1 focus:ring-amber-200 focus:shadow-lg focus:shadow-amber-200 outline-none transition"
                     />
                 </div>

@@ -31,13 +31,13 @@ function ChatBot() {
 
             console.log('recommendedCrop', recommendedCrop);
 
+            setQuestion('');
             const aiResponse = await generateAnswer(currentQuestion, recommendedCrop, nitrogen, phosphorus);
 
             setAnswer(aiResponse);
             setChatHistory(prev => [...prev, { type: 'answer', content: aiResponse }]);
 
             setGeneratingAnswer(false);
-            setQuestion('');
         } catch (error) {
             console.log(error);
             setAnswer("Sorry - Something went wrong. Please try again!");

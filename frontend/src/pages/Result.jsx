@@ -28,9 +28,11 @@ function Result() {
                         {/* Summary Row */}
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-6">
                             <div className="md:col-span-2 bg-white/60 rounded-xl p-4 border border-amber-700/30 shadow">
-                                <h3 className="text-xl font-semibold text-green-900 mb-2">Recommended Crop</h3>
+                                <h3 className="text-xl font-semibold text-green-900 mb-2">Recommended Crop(s)</h3>
                                 <p className="text-2xl font-black text-green-800">
-                                    {recommendedCrop || '—'}
+                                    {recommendedCrop.map((crop, index) => (
+                                        <span key={index}>{crop},</span>
+                                    )) || '—'}
                                 </p>
                                 <p className="text-sm text-green-900/70 mt-1">Chosen to align with your current nitrogen and phosphorus levels.</p>
                             </div>
