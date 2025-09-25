@@ -44,48 +44,25 @@ function ChatBot() {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-green-50 to-green-100">
-            {/* Navigation */}
-            <nav className="flex items-center justify-between px-8 py-6 max-w-4xl mx-auto">
-                <div className="flex items-center space-x-2">
-                    <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center">
-                        <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M10 2L3 7v11a2 2 0 002 2h10a2 2 0 002-2V7l-7-5z"/>
-                            <path d="M9 21V9h2v12"/>
-                        </svg>
-                    </div>
-                    <span className="text-2xl font-bold text-gray-800">KrishiMitra</span>
-                </div>
-                <div className="hidden md:flex space-x-8">
-                    <a href="#" className="text-gray-600 hover:text-green-600 font-medium">Home</a>
-                    <a href="#" className="text-gray-600 hover:text-green-600 font-medium">About</a>
-                    <a href="#" className="text-gray-600 hover:text-green-600 font-medium">Services</a>
-                    <a href="#" className="text-gray-600 hover:text-green-600 font-medium">Contact</a>
-                </div>
-            </nav>
-
-            <div className="h-full max-w-4xl mx-auto flex flex-col p-8" style={{height: 'calc(100vh - 120px)'}}>
-                {/* Header Section */}
+        <div className="h-screen bg-gradient-to-br from-green-50 to-green-100 flex flex-col">
+            {/* Header */}
+            <div className="flex-shrink-0 max-w-4xl mx-auto w-full px-8 pt-8">
                 <div className="text-center mb-8">
                     <h1 className="text-3xl font-bold text-gray-800 mb-2">Agricultural Expert Assistant</h1>
                     <p className="text-gray-600">Get personalized farming advice and answers to all your agricultural questions</p>
                 </div>
+            </div>
 
+            {/* Chat Container - Scrollable */}
+            <div className="flex-1 max-w-4xl mx-auto w-full px-8 overflow-hidden">
                 <div
                     ref={chatContainerRef}
-                    className="flex-1 overflow-y-auto mb-6 rounded-xl bg-white shadow-xl p-6 hide-scrollbar border border-green-200"
+                    className="h-full overflow-y-auto rounded-xl bg-white shadow-xl p-6 hide-scrollbar border border-green-200"
                 >
                     {chatHistory.length === 0 ?
                         (
                             <div className="h-full flex items-center justify-center text-center p-6">
                                 <div className="max-w-2xl flex flex-col gap-6">
-                                    <div className="mb-6">
-                                        <img 
-                                            src="https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" 
-                                            alt="Agricultural expert consultation" 
-                                            className="w-full h-64 object-cover rounded-xl"
-                                        />
-                                    </div>
                                     <h2 className="text-3xl font-bold text-gray-800">Welcome to KrishiMitra Chat</h2>
                                     <p className="text-xl text-gray-600">
                                         I'm your agricultural expert assistant, ready to help you with farming guidance, crop management, pest control, and sustainable agriculture practices.
@@ -111,7 +88,7 @@ function ChatBot() {
                                     <div key={index} className={`mb-6 ${chat.type === 'question' ? 'text-right' : 'text-left'}`}>
                                         <div className={`inline-block max-w-[80%] p-4 rounded-xl overflow-auto hide-scrollbar ${chat.type === 'question'
                                             ? 'bg-green-600 shadow-lg text-white rounded-br-none'
-                                            : 'bg-gray-100 shadow-lg text-gray-800 rounded-bl-none border border-gray-200'
+                                            : 'bg-green-100 shadow-lg text-gray-800 rounded-bl-none border border-gray-200'
                                             }`}>
                                             <ReactMarkdown className="overflow-auto hide-scrollbar prose prose-sm max-w-none">{chat.content}</ReactMarkdown>
                                         </div>
@@ -124,15 +101,18 @@ function ChatBot() {
                             <div className="inline-block bg-green-100 border border-green-200 p-4 rounded-xl animate-pulse">
                                 <div className="flex items-center space-x-2">
                                     <div className="w-2 h-2 bg-green-600 rounded-full animate-bounce"></div>
-                                    <div className="w-2 h-2 bg-green-600 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
-                                    <div className="w-2 h-2 bg-green-600 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+                                    <div className="w-2 h-2 bg-green-600 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                                    <div className="w-2 h-2 bg-green-600 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
                                     <span className="text-green-700 ml-2">KrishiMitra is thinking...</span>
                                 </div>
                             </div>
                         </div>
                     )}
                 </div>
+            </div>
 
+            {/* Fixed Input Area at Bottom */}
+            <div className="flex-shrink-0 max-w-4xl mx-auto w-full px-8 pb-8 pt-4">
                 <form onSubmit={(e) => { handleSubmit(e, question) }} className="bg-white rounded-xl shadow-xl border border-green-200 p-4">
                     <div className="flex gap-4">
                         <textarea
@@ -159,7 +139,6 @@ function ChatBot() {
                         </button>
                     </div>
                 </form>
-
             </div>
         </div>
     )

@@ -5,25 +5,6 @@ function HomePage() {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-green-50 to-green-100">
-            {/* Navigation */}
-            <nav className="flex items-center justify-between px-8 py-6 max-w-4xl mx-auto">
-                <div className="flex items-center space-x-2">
-                    <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center">
-                        <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M10 2L3 7v11a2 2 0 002 2h10a2 2 0 002-2V7l-7-5z"/>
-                            <path d="M9 21V9h2v12"/>
-                        </svg>
-                    </div>
-                    <span className="text-2xl font-bold text-gray-800">KrishiMitra</span>
-                </div>
-                <div className="hidden md:flex space-x-8">
-                    <a href="#" className="text-gray-600 hover:text-green-600 font-medium">Home</a>
-                    <a href="#" className="text-gray-600 hover:text-green-600 font-medium">About</a>
-                    <a href="#" className="text-gray-600 hover:text-green-600 font-medium">Services</a>
-                    <a href="#" className="text-gray-600 hover:text-green-600 font-medium">Contact</a>
-                </div>
-            </nav>
-
             <div className='h-full max-w-4xl mx-auto flex flex-col p-8'>
                 {/* Hero Section */}
                 <div className="text-center mb-12">
@@ -56,9 +37,9 @@ function HomePage() {
                             {/* Auto-detect (coming soon) */}
                             <section className='bg-white rounded-xl shadow-xl border border-green-200 p-6'>
                                 <div className="mb-4">
-                                    <img 
-                                        src="https://images.unsplash.com/photo-1625246333195-78d9c38ad449?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" 
-                                        alt="GPS location detection for soil analysis" 
+                                    <img
+                                        src="https://images.unsplash.com/photo-1625246333195-78d9c38ad449?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+                                        alt="GPS location detection for soil analysis"
                                         className="w-full h-48 object-cover rounded-lg"
                                     />
                                 </div>
