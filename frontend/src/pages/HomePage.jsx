@@ -1,86 +1,83 @@
-import React from 'react'
+import React from 'react';
+import { useTranslation } from 'react-i18next';
 import Form from '../components/HomePage/Form';
+import { MapPin, CheckCircle2, Sprout } from 'lucide-react';
 
 function HomePage() {
+    const { t } = useTranslation();
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-green-50 to-green-100">
-            <div className='h-full max-w-4xl mx-auto flex flex-col p-8'>
-                {/* Hero Section */}
-                <div className="text-center mb-12">
-                    <h1 className="text-4xl font-bold text-gray-800 mb-4">Smart Soil Analysis for Better Crops</h1>
-                    <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                        Discover the perfect crops for your soil with our advanced AI-powered analysis. Get personalized recommendations based on your soil's unique characteristics.
+        <div className="min-h-screen bg-earth-50">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                {/* Header Section */}
+                <div className="text-center mb-16">
+                    <h1 className="text-4xl lg:text-5xl font-bold text-earth-900 mb-6">
+                        {t('app.subtitle')}
+                    </h1>
+                    <p className="text-xl text-earth-600 max-w-3xl mx-auto leading-relaxed">
+                        {t('hero.description')}
                     </p>
                 </div>
 
-                {/* Subheading */}
-                <section className='bg-white rounded-xl border border-green-200 shadow-xl p-6 mb-8'>
-                    <h2 className='text-2xl font-bold text-green-800 mb-3'>Find the best crop for your soil</h2>
-                    <p className='text-gray-600 text-lg leading-relaxed'>This intelligent system helps you determine which crops suit your soil based on nutrient proportions, environmental conditions, and local farming practices. Get tailored guidance for optimal cultivation results.</p>
-                </section>
+                <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+                    {/* Left Column: Form */}
+                    <div className="lg:col-span-7">
+                        <Form />
+                    </div>
 
-                {/* Main Sections */}
-                <div className='flex-1 w-full flex items-start justify-center'>
-                    <div className='w-full grid grid-cols-1 lg:grid-cols-2 gap-8 items-start'>
-                        {/* Manual Entry (existing form) */}
-                        <div className='w-full'>
-                            <div className="mb-6">
-                                <h3 className="text-2xl font-bold text-gray-800 mb-2">Manual Soil Analysis</h3>
-                                <p className="text-gray-600">Enter your soil parameters manually for precise crop recommendations.</p>
+                    {/* Right Column: Info & Features */}
+                    <div className="lg:col-span-5 space-y-8">
+                        {/* Auto-detect Section */}
+                        <div className="bg-white rounded-2xl shadow-lg border border-earth-100 overflow-hidden">
+                            <div className="relative h-48">
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10" />
+                                <img
+                                    src="https://images.unsplash.com/photo-1581578731117-104f8a746956?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+                                    alt="Soil analysis"
+                                    className="w-full h-full object-cover"
+                                />
+                                <div className="absolute bottom-4 left-4 z-20">
+                                    <div className="flex items-center gap-2 text-white mb-1">
+                                        <MapPin className="w-5 h-5" />
+                                        <span className="font-semibold text-lg">{t('home.autoDetect')}</span>
+                                    </div>
+                                </div>
                             </div>
-                            <Form />
+                            <div className="p-6">
+                                <p className="text-earth-600 mb-6 leading-relaxed">
+                                    {t('home.autoDetectDesc')}
+                                </p>
+                                <button disabled className="w-full py-3 px-4 bg-earth-100 text-earth-400 rounded-xl font-medium cursor-not-allowed flex items-center justify-center gap-2">
+                                    <MapPin className="w-5 h-5" />
+                                    Detect Location
+                                </button>
+                            </div>
                         </div>
 
-                        {/* Auto-detect and additional info */}
-                        <div className="space-y-6">
-                            {/* Auto-detect (coming soon) */}
-                            <section className='bg-white rounded-xl shadow-xl border border-green-200 p-6'>
-                                <div className="mb-4">
-                                    <img
-                                        src="https://images.unsplash.com/photo-1625246333195-78d9c38ad449?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
-                                        alt="GPS location detection for soil analysis"
-                                        className="w-full h-48 object-cover rounded-lg"
-                                    />
-                                </div>
-                                <h3 className='text-2xl font-bold text-gray-800 mb-3'>Auto-detect soil (Coming soon)</h3>
-                                <p className='text-gray-600 mb-4'>We will use your location and SoilGrids API to automatically fetch soil proportions around you. Allow location access to instantly analyze your soil and get crop recommendations.</p>
-                                <div className='mt-4'>
-                                    <button disabled className='w-full px-6 py-3 rounded-lg bg-gray-400 text-white font-semibold cursor-not-allowed mb-3'>
-                                        Detect using my location
-                                    </button>
-                                    <p className='text-sm text-gray-500 text-center'>Feature under development. Stay tuned!</p>
-                                </div>
-                            </section>
-
-                            {/* Benefits Section */}
-                            <section className='bg-green-50 rounded-xl border border-green-200 p-6'>
-                                <h3 className='text-xl font-bold text-green-800 mb-4'>Why Choose KrishiMitra?</h3>
-                                <ul className='space-y-3'>
-                                    <li className='flex items-start space-x-3'>
-                                        <div className='w-2 h-2 bg-green-600 rounded-full mt-2'></div>
-                                        <span className='text-gray-700'>AI-powered crop recommendations based on scientific data</span>
+                        {/* Benefits Section */}
+                        <div className="bg-crops-50 rounded-2xl border border-crops-100 p-8">
+                            <h3 className="text-xl font-bold text-crops-900 mb-6 flex items-center gap-2">
+                                <Sprout className="w-6 h-6 text-crops-600" />
+                                {t('home.whyChoose')}
+                            </h3>
+                            <ul className="space-y-4">
+                                {[
+                                    t('features.step2Desc'),
+                                    t('features.step4Desc'),
+                                    t('features.step3Desc')
+                                ].map((benefit, index) => (
+                                    <li key={index} className="flex items-start gap-3">
+                                        <CheckCircle2 className="w-5 h-5 text-crops-600 mt-0.5 flex-shrink-0" />
+                                        <span className="text-earth-700 leading-relaxed">{benefit}</span>
                                     </li>
-                                    <li className='flex items-start space-x-3'>
-                                        <div className='w-2 h-2 bg-green-600 rounded-full mt-2'></div>
-                                        <span className='text-gray-700'>Personalized farming guidance in your local language</span>
-                                    </li>
-                                    <li className='flex items-start space-x-3'>
-                                        <div className='w-2 h-2 bg-green-600 rounded-full mt-2'></div>
-                                        <span className='text-gray-700'>Expert chatbot support for all your farming queries</span>
-                                    </li>
-                                    <li className='flex items-start space-x-3'>
-                                        <div className='w-2 h-2 bg-green-600 rounded-full mt-2'></div>
-                                        <span className='text-gray-700'>Sustainable agriculture practices and organic solutions</span>
-                                    </li>
-                                </ul>
-                            </section>
+                                ))}
+                            </ul>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    )
+    );
 }
 
-export default HomePage
+export default HomePage;
