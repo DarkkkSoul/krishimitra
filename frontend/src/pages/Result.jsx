@@ -1,187 +1,125 @@
-import React, { useContext } from 'react'
+import React, { useContext } from 'react';
 import { ProportionsContext } from '../utils/Contexts/ProportionsContext.jsx';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { Sprout, FileText, Droplets, Thermometer, Wind, ArrowRight, MessageSquare } from 'lucide-react';
 
 function Result() {
+    const { t } = useTranslation();
     const { recommendedCrop, nitrogen, phosphorus } = useContext(ProportionsContext);
 
-    const nutrientBadge = (label, value) => (
-        <div className="flex items-center gap-2 bg-green-100 text-green-800 px-4 py-2 rounded-full shadow-sm border border-green-200">
-            <span className="text-sm font-semibold">{label}:</span>
-            <span className="text-sm font-bold">{value ?? '—'}</span>
+    const NutrientBadge = ({ label, value, icon: Icon, color }) => (
+        <div className={`flex items-center gap-3 p-4 rounded-xl border ${color} bg-white shadow-sm`}>
+            <div className={`p-2 rounded-lg ${color.replace('border', 'bg').replace('200', '100')}`}>
+                <Icon className={`w-5 h-5 ${color.replace('border-', 'text-').replace('200', '700')}`} />
+            </div>
+            <div>
+                <p className="text-sm text-earth-500 font-medium">{label}</p>
+                <p className="text-lg font-bold text-earth-900">{value ?? '—'}</p>
+            </div>
         </div>
     );
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-green-50 to-green-100">
-            <div className="min-h-full max-w-4xl mx-auto flex flex-col p-8">
+        <div className="min-h-screen bg-earth-50 py-12">
+            <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Header Section */}
-                <div className="text-center mb-8">
-                    <h1 className="text-4xl font-bold text-gray-800 mb-4">Your Crop Analysis Results</h1>
-                    <p className="text-xl text-gray-600">
-                        Comprehensive soil analysis and personalized crop recommendations for your farm
+                <div className="text-center mb-12">
+                    <h1 className="text-3xl md:text-4xl font-bold text-earth-900 mb-4">
+                        {t('result.title')}
+                    </h1>
+                    <p className="text-lg text-earth-600">
+                        {t('result.subtitle')}
                     </p>
                 </div>
 
-                <main className="flex-1">
+                <div className="grid gap-8">
                     {/* Report Card */}
-                    <section className="bg-white rounded-2xl shadow-xl border border-green-200 p-8 mb-8">
-                        <div className="flex items-center mb-6">
-                            <img
-                                src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
-                                alt="Soil analysis report"
-                                className="w-20 h-20 object-cover rounded-xl mr-6"
-                            />
-                            <div>
-                                <h2 className="text-3xl font-bold text-gray-800 mb-2">Soil & Crop Analysis Report</h2>
-                                <p className="text-gray-600">Based on your soil inputs, here are personalized recommendations tailored for your farm's success.</p>
-                            </div>
-                        </div>
-
-                        {/* Summary Row */}
-                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-                            <div className="lg:col-span-2 bg-green-50 rounded-xl p-6 border border-green-200">
-                                <h3 className="text-2xl font-bold text-green-800 mb-4">🌱 Recommended Crops</h3>
-                                <div className="text-3xl font-bold text-green-700 mb-3">
-                                    {recommendedCrop.map((crop, index) => (
-                                        <span key={index} className="inline-block mr-2 mb-2 bg-green-600 text-white px-4 py-2 rounded-lg text-lg">
-                                            {crop}
-                                        </span>
-                                    )) || '—'}
+                    <section className="bg-white rounded-2xl shadow-xl border border-earth-100 overflow-hidden">
+                        <div className="p-8">
+                            <div className="flex items-start gap-6 mb-8">
+                                <div className="p-4 bg-crops-100 rounded-2xl">
+                                    <FileText className="w-8 h-8 text-crops-600" />
                                 </div>
-                                <p className="text-gray-600">These crops are perfectly suited for your soil's nitrogen and phosphorus levels, ensuring optimal growth and yield.</p>
-                            </div>
-                            <div className="bg-blue-50 rounded-xl p-6 border border-blue-200">
-                                <h3 className="text-xl font-bold text-blue-800 mb-4">📊 Nutrient Profile</h3>
-                                <div className="space-y-3">
-                                    {nutrientBadge('Nitrogen (N)', nitrogen)}
-                                    {nutrientBadge('Phosphorus (P)', phosphorus)}
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Guidance */}
-                        <div className="bg-yellow-50 rounded-xl p-6 border border-yellow-200">
-                            <h3 className="text-xl font-bold text-yellow-800 mb-4">💡 Expert Field Guidance</h3>
-                            <div className="grid md:grid-cols-2 gap-4">
-                                <ul className="space-y-3 text-gray-700">
-                                    <li className="flex items-start space-x-3">
-                                        <span className="text-green-600 font-bold">•</span>
-                                        <span>Maintain consistent soil moisture for optimal nutrient uptake</span>
-                                    </li>
-                                    <li className="flex items-start space-x-3">
-                                        <span className="text-green-600 font-bold">•</span>
-                                        <span>Prefer early morning or late evening irrigation to reduce evaporation</span>
-                                    </li>
-                                </ul>
-                                <ul className="space-y-3 text-gray-700">
-                                    <li className="flex items-start space-x-3">
-                                        <span className="text-green-600 font-bold">•</span>
-                                        <span>Mulching helps retain soil moisture and improves soil health</span>
-                                    </li>
-                                    <li className="flex items-start space-x-3">
-                                        <span className="text-green-600 font-bold">•</span>
-                                        <span>Monitor for pests weekly using integrated pest management (IPM)</span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </section>
-
-                    {/* Organic Fertilizer Section */}
-                    <section id="organic-fertilizer" className="bg-white rounded-2xl shadow-xl border border-green-200 p-8 mb-8">
-                        <div className="flex items-center mb-6">
-                            <img
-                                src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
-                                alt="Organic fertilizer preparation"
-                                className="w-20 h-20 object-cover rounded-xl mr-6"
-                            />
-                            <div>
-                                <h2 className="text-3xl font-bold text-gray-800 mb-2">🌿 Organic Fertilizer Recipe</h2>
-                                <p className="text-gray-600">Traditional Panchagavya mix for sustainable and healthy crop growth</p>
-                            </div>
-                        </div>
-
-                        <div className="grid lg:grid-cols-2 gap-8">
-                            <div>
-                                <h3 className="text-2xl font-bold text-green-800 mb-4">📋 Ingredients</h3>
-                                <div className="grid grid-cols-1 gap-3">
-                                    {[
-                                        'Cow dung: 5 kg',
-                                        'Cow urine: 3 liters',
-                                        'Cow milk: 2 liters',
-                                        'Cow curd: 2 liters',
-                                        'Cow ghee: 1 kg',
-                                        'Yellow bananas: 1 dozen',
-                                        'Tender coconut water: 3 liters',
-                                        'Sugarcane juice: 3 liters',
-                                    ].map((item, i) => (
-                                        <div key={i} className="bg-green-50 text-green-800 px-4 py-3 rounded-lg border border-green-200 font-medium">
-                                            {item}
-                                        </div>
-                                    ))}
+                                <div>
+                                    <h2 className="text-2xl font-bold text-earth-900 mb-2">
+                                        {t('result.reportTitle')}
+                                    </h2>
+                                    <p className="text-earth-600">
+                                        {t('result.reportDesc')}
+                                    </p>
                                 </div>
                             </div>
 
-                            <div>
-                                <h3 className="text-2xl font-bold text-blue-800 mb-4">⚗️ Preparation Steps</h3>
+                            <div className="grid lg:grid-cols-3 gap-8">
+                                {/* Recommended Crops */}
+                                <div className="lg:col-span-2 bg-crops-50 rounded-2xl p-6 border border-crops-100">
+                                    <h3 className="text-xl font-bold text-crops-900 mb-6 flex items-center gap-2">
+                                        <Sprout className="w-5 h-5" />
+                                        {t('result.recommendedCrops')}
+                                    </h3>
+                                    <div className="flex flex-wrap gap-3">
+                                        {recommendedCrop && recommendedCrop.length > 0 ? (
+                                            recommendedCrop.map((crop, index) => (
+                                                <span key={index} className="inline-flex items-center px-6 py-3 rounded-xl bg-white text-crops-700 font-bold text-lg shadow-sm border border-crops-100">
+                                                    {crop}
+                                                </span>
+                                            ))
+                                        ) : (
+                                            <span className="text-earth-500 italic">No recommendations available</span>
+                                        )}
+                                    </div>
+                                </div>
+
+                                {/* Nutrient Profile */}
                                 <div className="space-y-4">
-                                    {[
-                                        'Mix cow dung with water and let it sit for a few hours.',
-                                        'Add cow urine, milk, curd, ghee, bananas, coconut water, and sugarcane juice.',
-                                        'Cover and ferment for 21 days, stirring twice daily.',
-                                        'Strain the mixture using a cotton cloth.',
-                                        'Dilute with water (30:1) to use as a liquid fertilizer.',
-                                        'Apply as foliar spray or soil drench during the growing season.',
-                                    ].map((step, idx) => (
-                                        <div key={idx} className="flex items-start gap-4">
-                                            <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">
-                                                {idx + 1}
-                                            </div>
-                                            <p className="bg-blue-50 border border-blue-200 rounded-lg px-4 py-3 text-gray-700 flex-1">
-                                                {step}
-                                            </p>
-                                        </div>
-                                    ))}
+                                    <h3 className="text-xl font-bold text-earth-900 mb-4 flex items-center gap-2">
+                                        <Thermometer className="w-5 h-5 text-earth-600" />
+                                        {t('result.nutrientProfile')}
+                                    </h3>
+                                    <NutrientBadge
+                                        label="Nitrogen (N)"
+                                        value={nitrogen}
+                                        icon={Sprout}
+                                        color="border-blue-200"
+                                    />
+                                    <NutrientBadge
+                                        label="Phosphorus (P)"
+                                        value={phosphorus}
+                                        icon={Sprout}
+                                        color="border-purple-200"
+                                    />
                                 </div>
                             </div>
                         </div>
-
-                        <div className="mt-8 bg-green-50 rounded-xl p-6 border border-green-200">
-                            <p className="text-green-800 font-medium text-lg">
-                                💚 Incorporating this organic fertilizer can significantly improve crop yield and quality while promoting sustainable agricultural practices that benefit both your farm and the environment.
-                            </p>
-                        </div>
                     </section>
 
-                    {/* CTA to Chatbot */}
-                    <section className="bg-gradient-to-r from-green-600 to-green-700 rounded-2xl shadow-xl p-8 text-white">
-                        <div className="flex items-center justify-between">
-                            <div className="flex-1">
-                                <h3 className="text-3xl font-bold mb-3">🤖 Need More Personalized Advice?</h3>
-                                <p className="text-green-100 text-lg mb-6">
-                                    Chat with our AI agricultural expert to get dynamic recommendations on irrigation schedules, pest control strategies, and nutrient adjustments specifically tailored to your crops and soil conditions.
+                    {/* CTA Section */}
+                    <section className="bg-earth-900 rounded-2xl shadow-xl p-8 md:p-12 text-white relative overflow-hidden">
+                        <div className="absolute top-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full transform translate-x-1/3 -translate-y-1/3" />
+                        <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
+                            <div>
+                                <h3 className="text-2xl md:text-3xl font-bold mb-4 flex items-center gap-3">
+                                    <MessageSquare className="w-8 h-8 text-crops-400" />
+                                    {t('result.chatCtaTitle')}
+                                </h3>
+                                <p className="text-earth-300 text-lg max-w-xl">
+                                    {t('result.chatCtaDesc')}
                                 </p>
-                                <Link
-                                    to="/chatbot"
-                                    className="inline-block px-8 py-4 bg-white text-green-600 font-bold text-lg rounded-lg shadow-lg hover:bg-green-50 transition-colors"
-                                >
-                                    Start Expert Chat →
-                                </Link>
                             </div>
-                            <div className="hidden lg:block ml-8">
-                                <img
-                                    src="https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80"
-                                    alt="Agricultural expert consultation"
-                                    className="w-48 h-32 object-cover rounded-xl"
-                                />
-                            </div>
+                            <Link
+                                to="/chatbot"
+                                className="inline-flex items-center gap-2 px-8 py-4 bg-crops-600 hover:bg-crops-700 text-white font-bold text-lg rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1 whitespace-nowrap"
+                            >
+                                {t('result.chatCtaButton')}
+                                <ArrowRight className="w-5 h-5" />
+                            </Link>
                         </div>
                     </section>
-                </main>
+                </div>
             </div>
         </div>
-    )
+    );
 }
 
-export default Result
+export default Result;

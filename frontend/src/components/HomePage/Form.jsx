@@ -1,157 +1,147 @@
-import React, { useState } from 'react'
-import { getDataFromModel } from '../../utils/APIcalls/getDataFromModel.js';
-import { useContext } from 'react';
-import { ProportionsContext } from '../../utils/Contexts/ProportionsContext.jsx';
+import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { ProportionsContext } from '../../utils/Contexts/ProportionsContext.jsx';
+import { getDataFromModel } from '../../utils/APIcalls/getDataFromModel.js';
+import { TestTube, Thermometer, Droplets, Wind, Activity } from 'lucide-react';
 
 function Form() {
-
-    const { recommendedCrop, setRecommendedCrop, nitrogen, setNitrogen, phosphorus, setPhosphorus, potassium, setPotassium, temperature, setTemperature, humidity, setHumidity, pH, setpH, rainfall, setRainfall } = useContext(ProportionsContext);
+    const { t } = useTranslation();
     const navigate = useNavigate();
-
-    const proportions = {
-        Nitrogen: Number(nitrogen),
-        Phosporus: Number(phosphorus), // DON'T CHANGE PHOSPORUS SPELLING
-        Potassium: Number(potassium),
-        Temperature: Number(temperature),
-        Humidity: Number(humidity),
-        pH: Number(pH),
-        Rainfall: Number(rainfall),
-    };
+    const {
+        recommendedCrop, setRecommendedCrop,
+        nitrogen, setNitrogen,
+        phosphorus, setPhosphorus,
+        potassium, setPotassium,
+        temperature, setTemperature,
+        humidity, setHumidity,
+        pH, setpH,
+        rainfall, setRainfall
+    } = useContext(ProportionsContext);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const data = await getDataFromModel(proportions);
+        const proportions = {
+            Nitrogen: Number(nitrogen),
+            Phosporus: Number(phosphorus),
+            Potassium: Number(potassium),
+            Temperature: Number(temperature),
+            Humidity: Number(humidity),
+            pH: Number(pH),
+            Rainfall: Number(rainfall),
+        };
 
-        setRecommendedCrop(data?.prediction?.top3 || "Unknown");
-        setNitrogen(data.inputs.Nitrogen);
-        setPhosphorus(data.inputs.Phosporus);
-        setPotassium(data.inputs.Potassium);
-        setTemperature(data.inputs.Temperature);
-        setHumidity(data.inputs.Humidity);
-        setpH(data.inputs.pH);
-        setRainfall(data.inputs.Rainfall);
+        try {
+            const data = await getDataFromModel(proportions);
+            setRecommendedCrop(data?.prediction?.top3 || "Unknown");
 
-        console.log(recommendedCrop);
+            // Restore original logic: Update context with returned data
+            if (data?.inputs) {
+                setNitrogen(data.inputs.Nitrogen);
+                setPhosphorus(data.inputs.Phosporus); // Note: API uses 'Phosporus' spelling
+                setPotassium(data.inputs.Potassium);
+                setTemperature(data.inputs.Temperature);
+                setHumidity(data.inputs.Humidity);
+                setpH(data.inputs.pH);
+                setRainfall(data.inputs.Rainfall);
+            }
 
-        setTimeout(() => {
-            navigate('/result');
-        }, 1500);
-    }
+            setTimeout(() => {
+                navigate('/result');
+            }, 1000);
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    };
+
+    const InputField = ({ label, value, setValue, icon: Icon, placeholderValue }) => (
+        <div className="flex flex-col space-y-2">
+            <label className="flex items-center gap-2 text-sm font-medium text-earth-700">
+                {Icon && <Icon className="w-4 h-4 text-crops-600" />}
+                {label}
+            </label>
+            <input
+                type="number"
+                step="0.1"
+                placeholder={t('form.placeholder', { value: placeholderValue })}
+                value={value}
+                onChange={(e) => setValue(e.target.value)}
+                className="w-full px-4 py-3 rounded-xl border border-earth-200 bg-white text-earth-900 focus:ring-2 focus:ring-crops-500 focus:border-transparent outline-none transition-all duration-200 placeholder:text-earth-300"
+            />
+        </div>
+    );
 
     return (
-        <form
-            onSubmit={(e) => { handleSubmit(e) }}
-            className="flex flex-col gap-6 bg-green-100/40 shadow-2xl shadow-amber-200/80 p-6 rounded-2xl max-w-md w-full"
-        >
-            <h2 className="text-3xl text-istok-bold font-bold text-green-900 text-center mb-2">
-                Input soil proportions
-            </h2>
+        <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-xl border border-earth-100 p-6 md:p-8 w-full">
+            <div className="flex items-center gap-3 mb-8">
+                <div className="p-3 bg-crops-100 rounded-xl">
+                    <Activity className="w-6 h-6 text-crops-600" />
+                </div>
+                <h2 className="text-2xl font-bold text-earth-900">
+                    {t('form.title')}
+                </h2>
+            </div>
 
-            <div className="flex flex-col gap-4 text-telugu-thin">
-                <div className="flex flex-col flex-1">
-                    <label className="text-green-900 mb-2 text-md">
-                        Nitrogen (N)
-                    </label>
-                    <input
-                        type="number"
-                        step="1"
-                        placeholder="e.g. 90"
-                        value={nitrogen}
-                        onChange={(e) => setNitrogen(e.target.value)}
-                        className="border bg-green-100/40 text-green-900 px-3 pt-3 pb-2 rounded-xl focus:ring-1 focus:ring-amber-200 focus:shadow-lg focus:shadow-amber-200 outline-none transition"
-                    />
-                </div>
-
-                <div className="flex flex-col flex-1">
-                    <label className="text-green-900 mb-2 text-md">
-                        Phosphorus (P)
-                    </label>
-                    <input
-                        type="number"
-                        step="1"
-                        placeholder="e.g. 42"
-                        value={phosphorus}
-                        onChange={(e) => setPhosphorus(e.target.value)}
-                        className="border bg-green-100/40 text-green-900 px-3 pt-3 pb-2 rounded-xl focus:ring-1 focus:ring-amber-200 focus:shadow-lg focus:shadow-amber-200 outline-none transition"
-                    />
-                </div>
-
-                <div className="flex flex-col flex-1">
-                    <label className="text-green-900 mb-2 text-md">
-                        Humidity (H)
-                    </label>
-                    <input
-                        type="number"
-                        step="1"
-                        placeholder="e.g. 42"
-                        value={humidity}
-                        onChange={(e) => setHumidity(e.target.value)}
-                        className="border bg-green-100/40 text-green-900 px-3 pt-3 pb-2 rounded-xl focus:ring-1 focus:ring-amber-200 focus:shadow-lg focus:shadow-amber-200 outline-none transition"
-                    />
-                </div>
-                <div className="flex flex-col flex-1">
-                    <label className="text-green-900 mb-2 text-md">
-                        Potassium (K)
-                    </label>
-                    <input
-                        type="number"
-                        step="1"
-                        placeholder="e.g. 42"
-                        value={potassium}
-                        onChange={(e) => setPotassium(e.target.value)}
-                        className="border bg-green-100/40 text-green-900 px-3 pt-3 pb-2 rounded-xl focus:ring-1 focus:ring-amber-200 focus:shadow-lg focus:shadow-amber-200 outline-none transition"
-                    />
-                </div>
-                <div className="flex flex-col flex-1">
-                    <label className="text-green-900 mb-2 text-md">
-                        Rainfall
-                    </label>
-                    <input
-                        type="number"
-                        step="1"
-                        placeholder="e.g. 42"
-                        value={rainfall}
-                        onChange={(e) => setRainfall(e.target.value)}
-                        className="border bg-green-100/40 text-green-900 px-3 pt-3 pb-2 rounded-xl focus:ring-1 focus:ring-amber-200 focus:shadow-lg focus:shadow-amber-200 outline-none transition"
-                    />
-                </div>
-                <div className="flex flex-col flex-1">
-                    <label className="text-green-900 mb-2 text-md">
-                        Temperature (T)
-                    </label>
-                    <input
-                        type="number"
-                        step="1"
-                        placeholder="e.g. 42"
-                        value={temperature}
-                        onChange={(e) => setTemperature(e.target.value)}
-                        className="border bg-green-100/40 text-green-900 px-3 pt-3 pb-2 rounded-xl focus:ring-1 focus:ring-amber-200 focus:shadow-lg focus:shadow-amber-200 outline-none transition"
-                    />
-                </div>
-                <div className="flex flex-col flex-1">
-                    <label className="text-green-900 mb-2 text-md">
-                        pH
-                    </label>
-                    <input
-                        type="number"
-                        step="1"
-                        placeholder="e.g. 42"
-                        value={pH}
-                        onChange={(e) => setpH(e.target.value)}
-                        className="border bg-green-100/40 text-green-900 px-3 pt-3 pb-2 rounded-xl focus:ring-1 focus:ring-amber-200 focus:shadow-lg focus:shadow-amber-200 outline-none transition"
-                    />
-                </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <InputField
+                    label={t('form.nitrogen')}
+                    value={nitrogen}
+                    setValue={setNitrogen}
+                    icon={TestTube}
+                    placeholderValue="90"
+                />
+                <InputField
+                    label={t('form.phosphorus')}
+                    value={phosphorus}
+                    setValue={setPhosphorus}
+                    icon={TestTube}
+                    placeholderValue="42"
+                />
+                <InputField
+                    label={t('form.potassium')}
+                    value={potassium}
+                    setValue={setPotassium}
+                    icon={TestTube}
+                    placeholderValue="43"
+                />
+                <InputField
+                    label={t('form.ph')}
+                    value={pH}
+                    setValue={setpH}
+                    icon={Activity}
+                    placeholderValue="6.5"
+                />
+                <InputField
+                    label={t('form.temperature')}
+                    value={temperature}
+                    setValue={setTemperature}
+                    icon={Thermometer}
+                    placeholderValue="20"
+                />
+                <InputField
+                    label={t('form.humidity')}
+                    value={humidity}
+                    setValue={setHumidity}
+                    icon={Wind}
+                    placeholderValue="82"
+                />
+                <InputField
+                    label={t('form.rainfall')}
+                    value={rainfall}
+                    setValue={setRainfall}
+                    icon={Droplets}
+                    placeholderValue="200"
+                />
             </div>
 
             <button
                 type="submit"
-                className="bg-green-600 text-white font-semibold w-28 pt-2 pb-1 rounded-xl transition hover:bg-green-700 shadow-lg shadow-green-500 text-telugu-thin text-lg"
+                className="w-full bg-crops-600 hover:bg-crops-700 text-white font-bold py-4 rounded-xl transition-all duration-200 shadow-lg shadow-crops-200 hover:shadow-xl transform hover:-translate-y-0.5"
             >
-                Submit
+                {t('form.submit')}
             </button>
         </form>
-    )
+    );
 }
 
-export default Form
+export default Form;

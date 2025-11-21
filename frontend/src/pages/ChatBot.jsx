@@ -1,10 +1,12 @@
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import ReactMarkdown from "react-markdown";
+import { useTranslation } from 'react-i18next';
 import { generateAnswer } from '../utils/APIcalls/generateAnswer.js';
 import { ProportionsContext } from '../utils/Contexts/ProportionsContext.jsx';
+import { Send, Bot, User, Loader2, Sparkles } from 'lucide-react';
 
 function ChatBot() {
-
+    const { t, i18n } = useTranslation();
     const chatContainerRef = useRef(null);
     const [chatHistory, setChatHistory] = useState([]);
     const [question, setQuestion] = useState("");
@@ -19,129 +21,128 @@ function ChatBot() {
         }
     }, [chatHistory, generatingAnswer]);
 
-
-    const handleSubmit = async (e, question) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        if (!question.trim()) return;
+
+        const currentQuestion = question;
+        setChatHistory(prev => [...prev, { type: 'question', content: currentQuestion }]);
+        setGeneratingAnswer(true);
+        setQuestion('');
+
         try {
-            const currentQuestion = question;
-
-            setChatHistory(prev => [...prev, { type: 'question', content: currentQuestion }]);
-            setGeneratingAnswer(true);
-
-            console.log('recommendedCrop', recommendedCrop);
-
-            setQuestion('');
-            const aiResponse = await generateAnswer(currentQuestion, recommendedCrop, nitrogen, phosphorus);
-
+            const aiResponse = await generateAnswer(currentQuestion, recommendedCrop, nitrogen, phosphorus, i18n.language);
             setAnswer(aiResponse);
             setChatHistory(prev => [...prev, { type: 'answer', content: aiResponse }]);
-
-            setGeneratingAnswer(false);
         } catch (error) {
-            console.log(error);
-            setAnswer("Sorry - Something went wrong. Please try again!");
+            console.error(error);
+            setChatHistory(prev => [...prev, { type: 'answer', content: "Sorry - Something went wrong. Please try again!" }]);
+        } finally {
+            setGeneratingAnswer(false);
         }
-    }
+    };
 
     return (
-        <div className="h-screen bg-gradient-to-br from-green-50 to-green-100 flex flex-col">
+        <div className="h-[calc(100vh-64px)] bg-earth-50 flex flex-col">
             {/* Header */}
-            <div className="flex-shrink-0 max-w-4xl mx-auto w-full px-8 pt-8">
-                <div className="text-center mb-8">
-                    <h1 className="text-3xl font-bold text-gray-800 mb-2">Agricultural Expert Assistant</h1>
-                    <p className="text-gray-600">Get personalized farming advice and answers to all your agricultural questions</p>
+            <div className="bg-white border-b border-earth-100 p-4 shadow-sm flex-shrink-0">
+                <div className="max-w-4xl mx-auto flex items-center gap-3">
+                    <div className="p-2 bg-crops-100 rounded-lg">
+                        <Bot className="w-6 h-6 text-crops-600" />
+                    </div>
+                    <div>
+                        <h1 className="text-lg font-bold text-earth-900">{t('chatbot.title')}</h1>
+                        <p className="text-sm text-earth-500">{t('chatbot.subtitle')}</p>
+                    </div>
                 </div>
             </div>
 
-            {/* Chat Container - Scrollable */}
-            <div className="flex-1 max-w-4xl mx-auto w-full px-8 overflow-hidden">
+            {/* Chat Container */}
+            <div className="flex-1 overflow-hidden relative">
                 <div
                     ref={chatContainerRef}
-                    className="h-full overflow-y-auto rounded-xl bg-white shadow-xl p-6 hide-scrollbar border border-green-200"
+                    className="h-full overflow-y-auto p-4 md:p-8 space-y-6 max-w-4xl mx-auto"
                 >
-                    {chatHistory.length === 0 ?
-                        (
-                            <div className="h-full flex items-center justify-center text-center p-6">
-                                <div className="max-w-2xl flex flex-col gap-6">
-                                    <h2 className="text-3xl font-bold text-gray-800">Welcome to KrishiMitra Chat</h2>
-                                    <p className="text-xl text-gray-600">
-                                        I'm your agricultural expert assistant, ready to help you with farming guidance, crop management, pest control, and sustainable agriculture practices.
-                                    </p>
-                                    <div className="bg-green-50 rounded-lg p-4 border border-green-200">
-                                        <h3 className="font-semibold text-green-800 mb-2">You can ask me about:</h3>
-                                        <ul className="text-left text-gray-700 space-y-1">
-                                            <li>• Crop-specific farming techniques</li>
-                                            <li>• Pest and disease management</li>
-                                            <li>• Irrigation and water management</li>
-                                            <li>• Organic fertilizers and soil health</li>
-                                            <li>• Weather-based farming decisions</li>
-                                        </ul>
-                                    </div>
-                                    <p className="text-gray-500">
-                                        Just type your question below and press Enter or click Send!
-                                    </p>
-                                </div>
+                    {chatHistory.length === 0 ? (
+                        <div className="h-full flex flex-col items-center justify-center text-center p-8 opacity-80">
+                            <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-sm mb-6">
+                                <Sparkles className="w-10 h-10 text-crops-500" />
                             </div>
-                        ) : (
-                            <>
-                                {chatHistory.map((chat, index) => (
-                                    <div key={index} className={`mb-6 ${chat.type === 'question' ? 'text-right' : 'text-left'}`}>
-                                        <div className={`inline-block max-w-[80%] p-4 rounded-xl overflow-auto hide-scrollbar ${chat.type === 'question'
-                                            ? 'bg-green-600 shadow-lg text-white rounded-br-none'
-                                            : 'bg-green-100 shadow-lg text-gray-800 rounded-bl-none border border-gray-200'
-                                            }`}>
-                                            <ReactMarkdown className="overflow-auto hide-scrollbar prose prose-sm max-w-none">{chat.content}</ReactMarkdown>
-                                        </div>
+                            <h2 className="text-2xl font-bold text-earth-900 mb-3">{t('chatbot.welcomeTitle')}</h2>
+                            <p className="text-earth-600 max-w-md">
+                                {t('chatbot.welcomeDesc')}
+                            </p>
+                        </div>
+                    ) : (
+                        chatHistory.map((chat, index) => (
+                            <div
+                                key={index}
+                                className={`flex gap-4 ${chat.type === 'question' ? 'justify-end' : 'justify-start'}`}
+                            >
+                                {chat.type === 'answer' && (
+                                    <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm border border-earth-100 flex-shrink-0 mt-1">
+                                        <Bot className="w-5 h-5 text-crops-600" />
                                     </div>
-                                ))}
-                            </>
-                        )}
-                    {generatingAnswer && (
-                        <div className="text-left">
-                            <div className="inline-block bg-green-100 border border-green-200 p-4 rounded-xl animate-pulse">
-                                <div className="flex items-center space-x-2">
-                                    <div className="w-2 h-2 bg-green-600 rounded-full animate-bounce"></div>
-                                    <div className="w-2 h-2 bg-green-600 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                                    <div className="w-2 h-2 bg-green-600 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                                    <span className="text-green-700 ml-2">KrishiMitra is thinking...</span>
+                                )}
+
+                                <div
+                                    className={`max-w-[80%] md:max-w-[70%] p-4 rounded-2xl shadow-sm ${chat.type === 'question'
+                                            ? 'bg-crops-600 text-white rounded-br-none'
+                                            : 'bg-white text-earth-800 border border-earth-100 rounded-bl-none'
+                                        }`}
+                                >
+                                    <ReactMarkdown className="prose prose-sm max-w-none prose-p:leading-relaxed prose-pre:bg-gray-800 prose-pre:text-white">
+                                        {chat.content}
+                                    </ReactMarkdown>
                                 </div>
+
+                                {chat.type === 'question' && (
+                                    <div className="w-8 h-8 bg-crops-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                                        <User className="w-5 h-5 text-crops-700" />
+                                    </div>
+                                )}
+                            </div>
+                        ))
+                    )}
+
+                    {generatingAnswer && (
+                        <div className="flex gap-4 justify-start">
+                            <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm border border-earth-100 flex-shrink-0">
+                                <Bot className="w-5 h-5 text-crops-600" />
+                            </div>
+                            <div className="bg-white border border-earth-100 px-4 py-3 rounded-2xl rounded-bl-none shadow-sm flex items-center gap-2">
+                                <Loader2 className="w-4 h-4 text-crops-600 animate-spin" />
+                                <span className="text-sm text-earth-500">{t('chatbot.sending')}</span>
                             </div>
                         </div>
                     )}
                 </div>
             </div>
 
-            {/* Fixed Input Area at Bottom */}
-            <div className="flex-shrink-0 max-w-4xl mx-auto w-full px-8 pb-8 pt-4">
-                <form onSubmit={(e) => { handleSubmit(e, question) }} className="bg-white rounded-xl shadow-xl border border-green-200 p-4">
-                    <div className="flex gap-4">
-                        <textarea
-                            required
-                            className="flex-1 border-2 border-gray-200 rounded-lg p-3 outline-none focus:ring-2 resize-none focus:ring-green-500 focus:border-green-500 transition-colors"
+            {/* Input Area */}
+            <div className="bg-white border-t border-earth-100 p-4 flex-shrink-0">
+                <div className="max-w-4xl mx-auto">
+                    <form onSubmit={handleSubmit} className="relative flex items-center gap-2">
+                        <input
+                            type="text"
                             value={question}
                             onChange={(e) => setQuestion(e.target.value)}
-                            placeholder="Ask me anything about farming, crops, or agriculture..."
-                            rows="2"
-                            onKeyDown={(e) => {
-                                if (e.key === 'Enter' && !e.shiftKey) {
-                                    e.preventDefault();
-                                    handleSubmit(e, question);
-                                }
-                            }}
-                        ></textarea>
+                            placeholder={t('chatbot.inputPlaceholder')}
+                            className="w-full pl-6 pr-14 py-4 bg-earth-50 border-none rounded-xl focus:ring-2 focus:ring-crops-500 focus:bg-white transition-all duration-200 placeholder:text-earth-400"
+                            disabled={generatingAnswer}
+                        />
                         <button
                             type="submit"
-                            className={`px-6 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 shadow-lg transition-colors ${generatingAnswer ? 'opacity-50 cursor-not-allowed' : ''
-                                }`}
-                            disabled={generatingAnswer}
+                            disabled={generatingAnswer || !question.trim()}
+                            className="absolute right-2 p-2 bg-crops-600 text-white rounded-lg hover:bg-crops-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                         >
-                            {generatingAnswer ? 'Sending...' : 'Send'}
+                            <Send className="w-5 h-5" />
                         </button>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
-    )
+    );
 }
 
-export default ChatBot
+export default ChatBot;

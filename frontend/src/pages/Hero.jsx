@@ -1,126 +1,109 @@
-import React from 'react'
-import { useNavigate } from 'react-router-dom'
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { ArrowRight, Sprout, BarChart3, MessageSquare, Languages } from 'lucide-react';
 
 function Hero() {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const { t } = useTranslation();
+
+    const features = [
+        {
+            icon: <Sprout className="w-8 h-8 text-white" />,
+            title: t('features.step1'),
+            desc: t('features.step1Desc'),
+            color: 'bg-crops-500'
+        },
+        {
+            icon: <BarChart3 className="w-8 h-8 text-white" />,
+            title: t('features.step2'),
+            desc: t('features.step2Desc'),
+            color: 'bg-blue-500'
+        },
+        {
+            icon: <MessageSquare className="w-8 h-8 text-white" />,
+            title: t('features.step3'),
+            desc: t('features.step3Desc'),
+            color: 'bg-sun-500'
+        },
+        {
+            icon: <Languages className="w-8 h-8 text-white" />,
+            title: t('features.step4'),
+            desc: t('features.step4Desc'),
+            color: 'bg-purple-500'
+        }
+    ];
+
     return (
-        <div className="min-h-screen bg-gradient-to-br from-green-50 to-green-100">
-            {/* Navigation */}
-            <nav className="flex items-center justify-between py-6 max-w-7xl mx-auto">
-                <span className="text-2xl font-bold text-gray-800">KrishiMitra</span>
-            </nav>
-
+        <div className="flex flex-col">
             {/* Hero Section */}
-            <div className="max-w-4xl mx-auto px-8 py-16">
-                <div className="grid lg:grid-cols-2 gap-12 items-center">
-                    {/* Left Content */}
-                    <div className="space-y-9">
-                        <h1 className="text-5xl lg:text-5xl font-bold text-gray-800">
-                            Empowering
-                            <span className="block text-green-600">Farmers</span>
-                            <span className="block">for Sustainable</span>
-                            <span className="block text-green-600">Agriculture</span>
-                        </h1>
+            <section className="relative bg-earth-50 py-20 lg:py-32 overflow-hidden">
+                <div className="absolute inset-0 opacity-10">
+                    <div className="absolute right-0 top-0 w-1/2 h-full bg-crops-200 rounded-l-full transform translate-x-1/3" />
+                    <div className="absolute left-0 bottom-0 w-1/3 h-2/3 bg-sun-200 rounded-tr-full transform -translate-x-1/4 translate-y-1/4" />
+                </div>
 
-                        <p className="text-md text-gray-600 leading-relaxed max-w-lg">
-                            Our mission is to empower farmers with the resources and knowledge they need to grow their crops sustainably and effectively through smart soil analysis.
-                        </p>
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+                    <div className="grid lg:grid-cols-2 gap-12 items-center">
+                        <div className="space-y-8 text-center lg:text-left">
+                            <h1 className="text-4xl lg:text-6xl font-bold text-earth-900 leading-tight">
+                                {t('hero.title')}
+                            </h1>
+                            <p className="text-lg lg:text-xl text-earth-600 leading-relaxed max-w-2xl mx-auto lg:mx-0">
+                                {t('hero.description')}
+                            </p>
+                            <button
+                                onClick={() => navigate('/home')}
+                                className="inline-flex items-center gap-2 bg-crops-600 hover:bg-crops-700 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+                            >
+                                {t('hero.cta')}
+                                <ArrowRight className="w-5 h-5" />
+                            </button>
+                        </div>
 
-                        <button className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-semibold text-sm transition-colors duration-200 shadow-lg" onClick={() => navigate('/home')}>
-                            Get Started
-                        </button>
-                    </div>
-
-                    {/* Right Image */}
-                    <div className="relative">
-                        <div className="rounded-3xl overflow-hidden shadow-2xl">
-                            <img
-                                src="https://images.unsplash.com/photo-1574943320219-553eb213f72d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
-                                alt="Sustainable farming with green crops"
-                                className="w-full h-96 object-cover"
-                            />
+                        <div className="relative lg:h-[600px] flex items-center justify-center">
+                            <div className="relative w-full max-w-lg aspect-square">
+                                <div className="absolute inset-0 bg-crops-100 rounded-full opacity-20 animate-pulse" />
+                                <img
+                                    src="https://images.unsplash.com/photo-1625246333195-78d9c38ad449?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+                                    alt="Sustainable farming"
+                                    className="relative rounded-3xl shadow-2xl object-cover w-full h-full transform rotate-3 hover:rotate-0 transition-transform duration-500"
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            {/* How It Works Section */}
-            <div className="bg-white py-16">
-                <div className="max-w-4xl mx-auto px-8">
+            {/* Features Section */}
+            <section className="py-20 bg-white">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="text-center mb-16">
-                        <h2 className="text-4xl font-bold text-gray-800 mb-4">How KrishiMitra Works</h2>
-                        <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-                            Our intelligent system guides you through every step of crop selection and farming decisions, all in your local language.
-                        </p>
+                        <h2 className="text-3xl lg:text-4xl font-bold text-earth-900 mb-4">
+                            {t('features.title')}
+                        </h2>
+                        <div className="w-24 h-1.5 bg-crops-500 mx-auto rounded-full" />
                     </div>
 
-                    <div className="grid md:grid-cols-4 gap-8">
-                        {/* Step 1 */}
-                        <div className="text-center">
-                            <div className="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                                <span className="text-2xl font-bold text-white">1</span>
+                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                        {features.map((feature, index) => (
+                            <div key={index} className="bg-earth-50 rounded-2xl p-8 hover:shadow-lg transition-shadow duration-300 border border-earth-100">
+                                <div className={`w-14 h-14 ${feature.color} rounded-xl flex items-center justify-center mb-6 shadow-md`}>
+                                    {feature.icon}
+                                </div>
+                                <h3 className="text-xl font-bold text-earth-900 mb-3">
+                                    {feature.title}
+                                </h3>
+                                <p className="text-earth-600 leading-relaxed">
+                                    {feature.desc}
+                                </p>
                             </div>
-                            <h3 className="text-xl font-bold text-gray-800 mb-4">Input Soil Data</h3>
-                            <p className="text-gray-600 leading-relaxed">
-                                Enter your soil's nitrogen, phosphorus, potassium levels, pH, temperature, humidity, and rainfall data.
-                            </p>
-                        </div>
-
-                        {/* Step 2 */}
-                        <div className="text-center">
-                            <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                                <span className="text-2xl font-bold text-white">2</span>
-                            </div>
-                            <h3 className="text-xl font-bold text-gray-800 mb-4">AI Crop Recommendation</h3>
-                            <p className="text-gray-600 leading-relaxed">
-                                Our advanced AI analyzes your data and recommends the top 3 most suitable crops for your soil conditions.
-                            </p>
-                        </div>
-
-                        {/* Step 3 */}
-                        <div className="text-center">
-                            <div className="w-16 h-16 bg-yellow-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                                <span className="text-2xl font-bold text-white">3</span>
-                            </div>
-                            <h3 className="text-xl font-bold text-gray-800 mb-4">Expert Chatbot Support</h3>
-                            <p className="text-gray-600 leading-relaxed">
-                                Get detailed farming guidance, pest control tips, and irrigation schedules through our intelligent chatbot.
-                            </p>
-                        </div>
-
-                        {/* Step 4 */}
-                        <div className="text-center">
-                            <div className="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                                <span className="text-2xl font-bold text-white">4</span>
-                            </div>
-                            <h3 className="text-xl font-bold text-gray-800 mb-4">Local Language Support</h3>
-                            <p className="text-gray-600 leading-relaxed">
-                                All recommendations and guidance are provided in your local language for better understanding and implementation.
-                            </p>
-                        </div>
-                    </div>
-
-                    <div className="text-center mt-12">
-                        <p className="text-lg text-gray-600 mb-6">
-                            From soil analysis to harvest success - KrishiMitra is your complete agricultural companion that understands your local farming needs.
-                        </p>
-                        <button className="bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-colors duration-200 shadow-lg" onClick={() => navigate('/home')}>
-                            Start Your Journey
-                        </button>
+                        ))}
                     </div>
                 </div>
-            </div>
-            {/* Footer */}
-            <footer className="bg-green-600 text-white py-4">
-                <div className="max-w-4xl mx-auto px-8 flex flex-row justify-between items-center">
-                    <div className="text-2xl font-bold">
-                        KrishiMitra
-                    </div>
-                    <p className="text-green-200">&copy; 2025. All rights reserved.</p>
-                </div>
-            </footer>
+            </section>
         </div>
-    )
+    );
 }
 
-export default Hero
+export default Hero;
