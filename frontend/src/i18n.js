@@ -4,14 +4,18 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 
 import translationEN from './locales/en/translation.json';
 import translationHI from './locales/hi/translation.json';
+import translationML from './locales/ml/translation.json';
+import translationTE from './locales/te/translation.json';
+import translationTA from './locales/ta/translation.json';
+import translationKN from './locales/kn/translation.json';
 
 const resources = {
-  en: {
-    translation: translationEN
-  },
-  hi: {
-    translation: translationHI
-  }
+  en: { translation: translationEN },
+  hi: { translation: translationHI },
+  ml: { translation: translationML },
+  te: { translation: translationTE },
+  ta: { translation: translationTA },
+  kn: { translation: translationKN }
 };
 
 i18n
@@ -22,7 +26,7 @@ i18n
     fallbackLng: 'en',
     debug: true,
     interpolation: {
-      escapeValue: false // not needed for react as it escapes by default
+      escapeValue: false
     }
   });
 

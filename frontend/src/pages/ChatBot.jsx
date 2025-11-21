@@ -6,7 +6,7 @@ import { ProportionsContext } from '../utils/Contexts/ProportionsContext.jsx';
 import { Send, Bot, User, Loader2, Sparkles } from 'lucide-react';
 
 function ChatBot() {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const chatContainerRef = useRef(null);
     const [chatHistory, setChatHistory] = useState([]);
     const [question, setQuestion] = useState("");
@@ -31,7 +31,7 @@ function ChatBot() {
         setQuestion('');
 
         try {
-            const aiResponse = await generateAnswer(currentQuestion, recommendedCrop, nitrogen, phosphorus);
+            const aiResponse = await generateAnswer(currentQuestion, recommendedCrop, nitrogen, phosphorus, i18n.language);
             setAnswer(aiResponse);
             setChatHistory(prev => [...prev, { type: 'answer', content: aiResponse }]);
         } catch (error) {

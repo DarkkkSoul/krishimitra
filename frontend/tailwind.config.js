@@ -40,6 +40,9 @@ export default {
           800: '#92400e',
           900: '#78350f',
         }
+      },
+      fontFamily: {
+        sans: ['"Anek Devanagari"', '"Anek Kannada"', '"Anek Malayalam"', '"Anek Tamil"', '"Anek Telugu"', 'sans-serif'],
       }
     },
   },

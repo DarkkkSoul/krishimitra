@@ -34,8 +34,17 @@ function Form() {
         try {
             const data = await getDataFromModel(proportions);
             setRecommendedCrop(data?.prediction?.top3 || "Unknown");
-            // Update context with returned data if needed, or just keep user input
-            // setNitrogen(data.inputs.Nitrogen); ...
+
+            // Restore original logic: Update context with returned data
+            if (data?.inputs) {
+                setNitrogen(data.inputs.Nitrogen);
+                setPhosphorus(data.inputs.Phosporus); // Note: API uses 'Phosporus' spelling
+                setPotassium(data.inputs.Potassium);
+                setTemperature(data.inputs.Temperature);
+                setHumidity(data.inputs.Humidity);
+                setpH(data.inputs.pH);
+                setRainfall(data.inputs.Rainfall);
+            }
 
             setTimeout(() => {
                 navigate('/result');
