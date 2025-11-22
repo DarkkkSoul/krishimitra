@@ -17,17 +17,17 @@ const Layout = () => {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col bg-earth-50 font-sans text-earth-900">
+    <div className="min-h-screen flex flex-col bg-white font-sans text-gray-900">
       {/* Navbar */}
-      <nav className="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-earth-100">
+      <nav className="bg-white/95 backdrop-blur-lg sticky top-0 z-50 border-b-2 border-green-100 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16 items-center">
+          <div className="flex justify-between h-20 items-center">
             {/* Logo */}
-            <Link to="/" className="flex items-center gap-2 group">
-              <div className="bg-crops-100 p-2 rounded-lg group-hover:bg-crops-200 transition-colors">
-                <Sprout className="w-6 h-6 text-crops-600" />
+            <Link to="/" className="flex items-center gap-3 group">
+              <div className="bg-gradient-to-br from-green-400 to-green-600 p-2.5 rounded-2xl group-hover:shadow-lg transition-all duration-300 shadow-md">
+                <Sprout className="w-7 h-7 text-white" />
               </div>
-              <span className="text-xl font-bold text-earth-800 tracking-tight">
+              <span className="text-2xl font-extrabold text-gray-900 tracking-tight">
                 {t('app.title')}
               </span>
             </Link>
@@ -39,14 +39,14 @@ const Layout = () => {
                   <Link
                     key={link.path}
                     to={link.path}
-                    className={`text-sm font-medium transition-colors hover:text-crops-600 ${isActive(link.path) ? 'text-crops-600' : 'text-earth-600'
+                    className={`text-base font-semibold transition-all duration-200 hover:text-green-600 ${isActive(link.path) ? 'text-green-600' : 'text-gray-700'
                       }`}
                   >
                     {link.label}
                   </Link>
                 ))}
               </div>
-              <div className="h-6 w-px bg-earth-200" />
+              <div className="h-8 w-px bg-gray-200" />
               <LanguageToggle />
             </div>
 
@@ -55,7 +55,7 @@ const Layout = () => {
               <LanguageToggle />
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="p-2 rounded-lg hover:bg-earth-100 text-earth-600 transition-colors"
+                className="p-2.5 rounded-xl hover:bg-green-50 text-gray-700 transition-colors border-2 border-gray-200"
               >
                 {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
               </button>
@@ -65,16 +65,16 @@ const Layout = () => {
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="md:hidden border-t border-earth-100 bg-white">
-            <div className="px-4 pt-2 pb-6 space-y-2">
+          <div className="md:hidden border-t-2 border-green-100 bg-white shadow-lg">
+            <div className="px-4 pt-3 pb-6 space-y-2">
               {navLinks.map((link) => (
                 <Link
                   key={link.path}
                   to={link.path}
                   onClick={() => setIsMenuOpen(false)}
-                  className={`block px-4 py-3 rounded-lg text-base font-medium transition-colors ${isActive(link.path)
-                      ? 'bg-crops-50 text-crops-700'
-                      : 'text-earth-600 hover:bg-earth-50'
+                  className={`block px-5 py-4 rounded-xl text-base font-semibold transition-all ${isActive(link.path)
+                      ? 'bg-green-100 text-green-700'
+                      : 'text-gray-700 hover:bg-gray-50'
                     }`}
                 >
                   {link.label}
@@ -91,25 +91,41 @@ const Layout = () => {
       </main>
 
       {/* Footer */}
-      <footer className="bg-earth-900 text-earth-100 py-12">
+      <footer className="bg-gradient-to-br from-gray-900 to-gray-800 text-gray-100 py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-10">
             <div>
-              <div className="flex items-center gap-2 mb-4">
-                <Sprout className="w-6 h-6 text-crops-400" />
-                <span className="text-xl font-bold text-white">
+              <div className="flex items-center gap-3 mb-5">
+                <div className="bg-green-500 p-2.5 rounded-2xl shadow-lg">
+                  <Sprout className="w-7 h-7 text-white" />
+                </div>
+                <span className="text-2xl font-extrabold text-white">
                   {t('app.title')}
                 </span>
               </div>
-              <p className="text-earth-300 text-sm leading-relaxed max-w-xs">
+              <p className="text-gray-300 text-base leading-relaxed max-w-xs">
                 {t('hero.description')}
               </p>
             </div>
 
-            {/* Add more footer sections if needed */}
+            <div>
+              <h3 className="text-lg font-bold text-white mb-4">🌾 Quick Links</h3>
+              <ul className="space-y-2">
+                <li><Link to="/" className="text-gray-300 hover:text-green-400 transition-colors">Home</Link></li>
+                <li><Link to="/home" className="text-gray-300 hover:text-green-400 transition-colors">Analyze Soil</Link></li>
+                <li><Link to="/chatbot" className="text-gray-300 hover:text-green-400 transition-colors">AI Assistant</Link></li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-bold text-white mb-4">💚 Mission</h3>
+              <p className="text-gray-300 text-sm leading-relaxed">
+                Empowering farmers with AI-driven insights for sustainable and profitable agriculture.
+              </p>
+            </div>
           </div>
-          <div className="border-t border-earth-800 mt-12 pt-8 text-center text-sm text-earth-400">
-            <p>&copy; {new Date().getFullYear()} {t('app.title')}. All rights reserved.</p>
+          <div className="border-t border-gray-700 mt-12 pt-8 text-center text-sm text-gray-400">
+            <p>&copy; {new Date().getFullYear()} {t('app.title')}. All rights reserved. Made with 💚 for farmers.</p>
           </div>
         </div>
       </footer>

@@ -179,16 +179,16 @@ function ChatBot() {
     };
 
     return (
-        <div className="h-[calc(100vh-64px)] bg-earth-50 flex flex-col">
+        <div className="h-[calc(100vh-64px)] bg-gradient-to-br from-green-50 via-white to-green-50 flex flex-col">
             {/* Header */}
-            <div className="bg-white border-b border-earth-100 p-4 shadow-sm flex-shrink-0">
-                <div className="max-w-4xl mx-auto flex items-center gap-3">
-                    <div className="p-2 bg-crops-100 rounded-lg">
-                        <Bot className="w-6 h-6 text-crops-600" />
+            <div className="bg-white border-b-2 border-green-100 p-5 shadow-md flex-shrink-0">
+                <div className="max-w-4xl mx-auto flex items-center gap-4">
+                    <div className="p-3 bg-gradient-to-br from-green-400 to-green-600 rounded-2xl shadow-lg">
+                        <Bot className="w-7 h-7 text-white" />
                     </div>
                     <div>
-                        <h1 className="text-lg font-bold text-earth-900">{t('chatbot.title')}</h1>
-                        <p className="text-sm text-earth-500">{t('chatbot.subtitle')}</p>
+                        <h1 className="text-xl font-bold text-gray-900">{t('chatbot.title')}</h1>
+                        <p className="text-sm text-green-600 font-medium">🤖 {t('chatbot.subtitle')}</p>
                     </div>
                 </div>
             </div>
@@ -197,17 +197,28 @@ function ChatBot() {
             <div className="flex-1 overflow-hidden relative">
                 <div
                     ref={chatContainerRef}
-                    className="h-full overflow-y-auto p-4 md:p-8 space-y-6 max-w-4xl mx-auto"
+                    className="h-full overflow-y-auto p-6 md:p-10 space-y-8 max-w-4xl mx-auto"
                 >
                     {chatHistory.length === 0 ? (
-                        <div className="h-full flex flex-col items-center justify-center text-center p-8 opacity-80">
-                            <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-sm mb-6">
-                                <Sparkles className="w-10 h-10 text-crops-500" />
+                        <div className="h-full flex flex-col items-center justify-center text-center p-10">
+                            <div className="w-24 h-24 bg-gradient-to-br from-green-400 to-green-600 rounded-3xl flex items-center justify-center shadow-2xl mb-8 animate-pulse">
+                                <Sparkles className="w-12 h-12 text-white" />
                             </div>
-                            <h2 className="text-2xl font-bold text-earth-900 mb-3">{t('chatbot.welcomeTitle')}</h2>
-                            <p className="text-earth-600 max-w-md">
+                            <h2 className="text-3xl font-extrabold text-gray-900 mb-4">{t('chatbot.welcomeTitle')}</h2>
+                            <p className="text-gray-600 text-lg max-w-md leading-relaxed">
                                 {t('chatbot.welcomeDesc')}
                             </p>
+                            <div className="mt-8 flex flex-wrap gap-3 justify-center">
+                                <span className="px-4 py-2 bg-green-100 text-green-700 rounded-full text-sm font-semibold">
+                                    🌾 Crop Advice
+                                </span>
+                                <span className="px-4 py-2 bg-green-100 text-green-700 rounded-full text-sm font-semibold">
+                                    💧 Irrigation Tips
+                                </span>
+                                <span className="px-4 py-2 bg-green-100 text-green-700 rounded-full text-sm font-semibold">
+                                    🐛 Pest Control
+                                </span>
+                            </div>
                         </div>
                     ) : (
                         chatHistory.map((chat, index) => (
@@ -216,27 +227,28 @@ function ChatBot() {
                                 className={`flex gap-4 ${chat.type === 'question' ? 'justify-end' : 'justify-start'}`}
                             >
                                 {chat.type === 'answer' && (
-                                    <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm border border-earth-100 flex-shrink-0 mt-1">
-                                        <Bot className="w-5 h-5 text-crops-600" />
+                                    <div className="w-10 h-10 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center shadow-lg flex-shrink-0 mt-1">
+                                        <Bot className="w-6 h-6 text-white" />
                                     </div>
                                 )}
 
                                 <div
-                                    className={`max-w-[80%] md:max-w-[70%] p-4 rounded-2xl shadow-sm ${chat.type === 'question'
-                                        ? 'bg-crops-600 text-white rounded-br-none'
-                                        : 'bg-white text-earth-800 border border-earth-100 rounded-bl-none'
+                                    className={`max-w-[80%] md:max-w-[70%] p-5 rounded-3xl shadow-lg ${chat.type === 'question'
+                                        ? 'bg-gradient-to-br from-green-500 to-green-600 text-white rounded-br-md'
+                                        : 'bg-white text-gray-800 border-2 border-green-100 rounded-bl-md'
                                         }`}
                                 >
                                     <ReactMarkdown className="prose prose-sm max-w-none prose-p:leading-relaxed prose-pre:bg-gray-800 prose-pre:text-white">
                                         {chat.content}
                                     </ReactMarkdown>
                                     {chat.type === 'answer' && (
-                                        <div className="mt-2 flex justify-end">
+                                        <div className="mt-3 flex justify-end">
                                             <button
                                                 type="button"
                                                 onClick={() => speak(chat.content)}
-                                                className="p-1.5 rounded-md border border-earth-200 text-earth-700 hover:bg-earth-50"
+                                                className="p-2 rounded-xl border-2 border-green-200 text-green-700 hover:bg-green-50 transition-all duration-200"
                                                 disabled={generatingAnswer}
+                                                title="Listen to response"
                                             >
                                                 <Volume2 className="w-4 h-4" />
                                             </button>
@@ -245,8 +257,8 @@ function ChatBot() {
                                 </div>
 
                                 {chat.type === 'question' && (
-                                    <div className="w-8 h-8 bg-crops-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                                        <User className="w-5 h-5 text-crops-700" />
+                                    <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1 border-2 border-green-200">
+                                        <User className="w-6 h-6 text-green-700" />
                                     </div>
                                 )}
                             </div>
@@ -255,12 +267,12 @@ function ChatBot() {
 
                     {generatingAnswer && (
                         <div className="flex gap-4 justify-start">
-                            <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm border border-earth-100 flex-shrink-0">
-                                <Bot className="w-5 h-5 text-crops-600" />
+                            <div className="w-10 h-10 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center shadow-lg flex-shrink-0">
+                                <Bot className="w-6 h-6 text-white" />
                             </div>
-                            <div className="bg-white border border-earth-100 px-4 py-3 rounded-2xl rounded-bl-none shadow-sm flex items-center gap-2">
-                                <Loader2 className="w-4 h-4 text-crops-600 animate-spin" />
-                                <span className="text-sm text-earth-500">{t('chatbot.sending')}</span>
+                            <div className="bg-white border-2 border-green-100 px-5 py-4 rounded-3xl rounded-bl-md shadow-lg flex items-center gap-3">
+                                <Loader2 className="w-5 h-5 text-green-600 animate-spin" />
+                                <span className="text-sm text-gray-600 font-medium">{t('chatbot.sending')}</span>
                             </div>
                         </div>
                     )}
@@ -268,31 +280,31 @@ function ChatBot() {
             </div>
 
             {/* Input Area */}
-            <div className="bg-white border-t border-earth-100 p-4 flex-shrink-0">
+            <div className="bg-white border-t-2 border-green-100 p-5 flex-shrink-0 shadow-lg">
                 <div className="max-w-4xl mx-auto">
-                    <form onSubmit={handleSubmit} className="relative flex items-center gap-2">
+                    <form onSubmit={handleSubmit} className="relative flex items-center gap-3">
                         <input
                             type="text"
                             value={question}
                             onChange={(e) => setQuestion(e.target.value)}
                             placeholder={t('chatbot.inputPlaceholder')}
-                            className="w-full pl-6 pr-28 py-4 bg-earth-50 border-none rounded-xl focus:ring-2 focus:ring-crops-500 focus:bg-white transition-all duration-200 placeholder:text-earth-400"
+                            className="w-full pl-6 pr-32 py-5 bg-gray-50 border-2 border-gray-200 rounded-2xl focus:ring-2 focus:ring-green-400 focus:border-green-500 focus:bg-white transition-all duration-200 placeholder:text-gray-400 text-gray-800"
                             disabled={generatingAnswer}
                         />
                         <button
                             type="button"
                             onClick={isListening ? stopListening : startListening}
                             disabled={!canUseSTT || generatingAnswer}
-                            className="absolute right-12 p-2 bg-white border border-earth-200 text-earth-700 rounded-lg hover:bg-earth-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                            className={`absolute right-16 p-3 rounded-xl border-2 transition-all duration-200 ${isListening ? 'bg-green-100 border-green-400 text-green-700' : 'bg-white border-gray-300 text-gray-600 hover:bg-gray-50'} disabled:opacity-50 disabled:cursor-not-allowed`}
                             aria-label="voice input"
                             title={canUseSTT ? (isListening ? 'Stop listening' : 'Speak') : 'Voice input not supported'}
                         >
-                            <Mic className={`w-5 h-5 ${isListening ? 'text-crops-600' : ''}`} />
+                            <Mic className="w-5 h-5" />
                         </button>
                         <button
                             type="submit"
                             disabled={generatingAnswer || !question.trim()}
-                            className="absolute right-2 p-2 bg-crops-600 text-white rounded-lg hover:bg-crops-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                            className="absolute right-2 p-3 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl hover:from-green-600 hover:to-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg"
                         >
                             <Send className="w-5 h-5" />
                         </button>

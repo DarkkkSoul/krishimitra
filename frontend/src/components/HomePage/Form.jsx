@@ -35,29 +35,17 @@ function Form() {
             const data = await getDataFromModel(proportions);
             setRecommendedCrop(data?.prediction?.top3 || "Unknown");
 
-            // Restore original logic: Update context with returned data
-            if (data?.inputs) {
-                setNitrogen(data.inputs.Nitrogen);
-                setPhosphorus(data.inputs.Phosporus); // Note: API uses 'Phosporus' spelling
-                setPotassium(data.inputs.Potassium);
-                setTemperature(data.inputs.Temperature);
-                setHumidity(data.inputs.Humidity);
-                setpH(data.inputs.pH);
-                setRainfall(data.inputs.Rainfall);
-            }
-
-            setTimeout(() => {
-                navigate('/result');
-            }, 1000);
+            // Navigate immediately without updating state to prevent re-render
+            navigate('/result');
         } catch (error) {
             console.error("Error fetching data:", error);
         }
     };
 
     const InputField = ({ label, value, setValue, icon: Icon, placeholderValue }) => (
-        <div className="flex flex-col space-y-2">
-            <label className="flex items-center gap-2 text-sm font-medium text-earth-700">
-                {Icon && <Icon className="w-4 h-4 text-crops-600" />}
+        <div className="flex flex-col space-y-2.5">
+            <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
+                {Icon && <Icon className="w-4 h-4 text-green-600" />}
                 {label}
             </label>
             <input
@@ -66,20 +54,25 @@ function Form() {
                 placeholder={t('form.placeholder', { value: placeholderValue })}
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl border border-earth-200 bg-white text-earth-900 focus:ring-2 focus:ring-crops-500 focus:border-transparent outline-none transition-all duration-200 placeholder:text-earth-300"
+                className="w-full px-5 py-3.5 rounded-xl border-2 border-gray-200 bg-white text-gray-800 focus:ring-2 focus:ring-green-400 focus:border-green-500 outline-none transition-all duration-200 placeholder:text-gray-400 hover:border-green-300"
             />
         </div>
     );
 
     return (
-        <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-xl border border-earth-100 p-6 md:p-8 w-full">
-            <div className="flex items-center gap-3 mb-8">
-                <div className="p-3 bg-crops-100 rounded-xl">
-                    <Activity className="w-6 h-6 text-crops-600" />
+        <form onSubmit={handleSubmit} className="bg-white rounded-3xl shadow-2xl border-2 border-green-100 p-8 md:p-10 w-full hover:shadow-green-200/50 transition-all duration-300">
+            <div className="mb-8">
+                <div className="flex items-center gap-3 mb-3">
+                    <div className="p-3 bg-gradient-to-br from-green-400 to-green-600 rounded-2xl shadow-lg">
+                        <Activity className="w-7 h-7 text-white" />
+                    </div>
+                    <div>
+                        <h2 className="text-3xl font-bold text-gray-800">
+                            {t('form.title')}
+                        </h2>
+                    </div>
                 </div>
-                <h2 className="text-2xl font-bold text-earth-900">
-                    {t('form.title')}
-                </h2>
+                <p className="text-green-600 font-medium ml-16">🌱 Precision farming starts with accurate data</p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
@@ -136,9 +129,9 @@ function Form() {
 
             <button
                 type="submit"
-                className="w-full bg-crops-600 hover:bg-crops-700 text-white font-bold py-4 rounded-xl transition-all duration-200 shadow-lg shadow-crops-200 hover:shadow-xl transform hover:-translate-y-0.5"
+                className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-5 rounded-2xl transition-all duration-300 shadow-xl shadow-green-300/50 hover:shadow-2xl hover:shadow-green-400/50 transform hover:-translate-y-1 text-lg"
             >
-                {t('form.submit')}
+                ✨ {t('form.submit')}
             </button>
         </form>
     );

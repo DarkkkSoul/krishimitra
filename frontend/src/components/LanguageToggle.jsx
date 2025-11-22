@@ -38,26 +38,26 @@ const LanguageToggle = () => {
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/90 hover:bg-white text-earth-800 font-medium shadow-sm transition-all duration-200 border border-earth-200"
+        className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white hover:bg-green-50 text-gray-800 font-semibold shadow-sm transition-all duration-200 border-2 border-gray-200 hover:border-green-300"
         title="Change Language"
       >
-        <Languages className="w-4 h-4" />
+        <Languages className="w-5 h-5 text-green-600" />
         <span className="hidden sm:inline">{currentLang.native}</span>
         <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-earth-100 py-2 z-50 animate-in fade-in slide-in-from-top-2">
+        <div className="absolute right-0 mt-3 w-52 bg-white rounded-2xl shadow-2xl border-2 border-green-100 py-2 z-50">
           {languages.map((lang) => (
             <button
               key={lang.code}
               onClick={() => handleLanguageChange(lang.code)}
-              className={`w-full text-left px-4 py-2.5 text-sm hover:bg-earth-50 transition-colors flex items-center justify-between ${i18n.language === lang.code ? 'text-crops-600 font-bold bg-crops-50' : 'text-earth-700'
+              className={`w-full text-left px-5 py-3 text-sm hover:bg-green-50 transition-all flex items-center justify-between ${i18n.language === lang.code ? 'text-green-700 font-bold bg-green-50' : 'text-gray-700'
                 }`}
             >
               <span>{lang.native}</span>
               {i18n.language === lang.code && (
-                <div className="w-1.5 h-1.5 rounded-full bg-crops-600" />
+                <div className="w-2 h-2 rounded-full bg-green-600" />
               )}
             </button>
           ))}

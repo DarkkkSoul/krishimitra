@@ -9,43 +9,48 @@ function Result() {
     const { recommendedCrop, nitrogen, phosphorus } = useContext(ProportionsContext);
 
     const NutrientBadge = ({ label, value, icon: Icon, color }) => (
-        <div className={`flex items-center gap-3 p-4 rounded-xl border ${color} bg-white shadow-sm`}>
-            <div className={`p-2 rounded-lg ${color.replace('border', 'bg').replace('200', '100')}`}>
-                <Icon className={`w-5 h-5 ${color.replace('border-', 'text-').replace('200', '700')}`} />
+        <div className={`flex items-center gap-4 p-5 rounded-2xl border-2 ${color} bg-white shadow-lg hover:shadow-xl transition-all duration-200`}>
+            <div className="p-3 rounded-xl bg-green-100">
+                <Icon className="w-6 h-6 text-green-600" />
             </div>
             <div>
-                <p className="text-sm text-earth-500 font-medium">{label}</p>
-                <p className="text-lg font-bold text-earth-900">{value ?? '—'}</p>
+                <p className="text-sm text-gray-600 font-semibold">{label}</p>
+                <p className="text-2xl font-bold text-gray-900">{value ?? '—'}</p>
             </div>
         </div>
     );
 
     return (
-        <div className="min-h-screen bg-earth-50 py-12">
-            <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-green-50 py-16">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Header Section */}
-                <div className="text-center mb-12">
-                    <h1 className="text-3xl md:text-4xl font-bold text-earth-900 mb-4">
+                <div className="text-center mb-16">
+                    <div className="inline-block mb-4">
+                        <span className="px-4 py-2 bg-green-100 text-green-700 rounded-full text-sm font-semibold">
+                            ✅ Analysis Complete
+                        </span>
+                    </div>
+                    <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-5">
                         {t('result.title')}
                     </h1>
-                    <p className="text-lg text-earth-600">
+                    <p className="text-xl text-gray-600">
                         {t('result.subtitle')}
                     </p>
                 </div>
 
-                <div className="grid gap-8">
+                <div className="grid gap-10">
                     {/* Report Card */}
-                    <section className="bg-white rounded-2xl shadow-xl border border-earth-100 overflow-hidden">
-                        <div className="p-8">
-                            <div className="flex items-start gap-6 mb-8">
-                                <div className="p-4 bg-crops-100 rounded-2xl">
-                                    <FileText className="w-8 h-8 text-crops-600" />
+                    <section className="bg-white rounded-3xl shadow-2xl border-2 border-green-100 overflow-hidden">
+                        <div className="p-10">
+                            <div className="flex items-start gap-6 mb-10">
+                                <div className="p-4 bg-gradient-to-br from-green-400 to-green-600 rounded-2xl shadow-lg">
+                                    <FileText className="w-9 h-9 text-white" />
                                 </div>
                                 <div>
-                                    <h2 className="text-2xl font-bold text-earth-900 mb-2">
+                                    <h2 className="text-3xl font-bold text-gray-900 mb-3">
                                         {t('result.reportTitle')}
                                     </h2>
-                                    <p className="text-earth-600">
+                                    <p className="text-gray-600 text-lg">
                                         {t('result.reportDesc')}
                                     </p>
                                 </div>
@@ -53,41 +58,45 @@ function Result() {
 
                             <div className="grid lg:grid-cols-3 gap-8">
                                 {/* Recommended Crops */}
-                                <div className="lg:col-span-2 bg-crops-50 rounded-2xl p-6 border border-crops-100">
-                                    <h3 className="text-xl font-bold text-crops-900 mb-6 flex items-center gap-2">
-                                        <Sprout className="w-5 h-5" />
+                                <div className="lg:col-span-2 bg-gradient-to-br from-green-50 to-green-100 rounded-3xl p-8 border-2 border-green-200 shadow-lg">
+                                    <h3 className="text-2xl font-bold text-green-900 mb-7 flex items-center gap-3">
+                                        <div className="p-2 bg-white rounded-xl shadow-md">
+                                            <Sprout className="w-6 h-6 text-green-600" />
+                                        </div>
                                         {t('result.recommendedCrops')}
                                     </h3>
-                                    <div className="flex flex-wrap gap-3">
+                                    <div className="flex flex-wrap gap-4">
                                         {recommendedCrop && recommendedCrop.length > 0 ? (
                                             recommendedCrop.map((crop, index) => (
-                                                <span key={index} className="inline-flex items-center px-6 py-3 rounded-xl bg-white text-crops-700 font-bold text-lg shadow-sm border border-crops-100">
-                                                    {crop}
+                                                <span key={index} className="inline-flex items-center px-7 py-4 rounded-2xl bg-white text-green-700 font-bold text-xl shadow-md border-2 border-green-200 hover:shadow-lg transition-all duration-200 hover:-translate-y-1">
+                                                    🌾 {crop}
                                                 </span>
                                             ))
                                         ) : (
-                                            <span className="text-earth-500 italic">No recommendations available</span>
+                                            <span className="text-gray-500 italic">No recommendations available</span>
                                         )}
                                     </div>
                                 </div>
 
                                 {/* Nutrient Profile */}
-                                <div className="space-y-4">
-                                    <h3 className="text-xl font-bold text-earth-900 mb-4 flex items-center gap-2">
-                                        <Thermometer className="w-5 h-5 text-earth-600" />
+                                <div className="space-y-5">
+                                    <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+                                        <div className="p-2 bg-green-100 rounded-xl">
+                                            <Thermometer className="w-6 h-6 text-green-600" />
+                                        </div>
                                         {t('result.nutrientProfile')}
                                     </h3>
                                     <NutrientBadge
                                         label="Nitrogen (N)"
                                         value={nitrogen}
                                         icon={Sprout}
-                                        color="border-blue-200"
+                                        color="border-green-300"
                                     />
                                     <NutrientBadge
                                         label="Phosphorus (P)"
                                         value={phosphorus}
                                         icon={Sprout}
-                                        color="border-purple-200"
+                                        color="border-green-300"
                                     />
                                 </div>
                             </div>
@@ -95,24 +104,27 @@ function Result() {
                     </section>
 
                     {/* CTA Section */}
-                    <section className="bg-earth-900 rounded-2xl shadow-xl p-8 md:p-12 text-white relative overflow-hidden">
-                        <div className="absolute top-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full transform translate-x-1/3 -translate-y-1/3" />
-                        <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
+                    <section className="bg-gradient-to-r from-green-600 to-green-700 rounded-3xl shadow-2xl p-10 md:p-14 text-white relative overflow-hidden">
+                        <div className="absolute top-0 right-0 w-80 h-80 bg-white opacity-10 rounded-full transform translate-x-1/3 -translate-y-1/3" />
+                        <div className="absolute bottom-0 left-0 w-64 h-64 bg-white opacity-5 rounded-full transform -translate-x-1/3 translate-y-1/3" />
+                        <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-10">
                             <div>
-                                <h3 className="text-2xl md:text-3xl font-bold mb-4 flex items-center gap-3">
-                                    <MessageSquare className="w-8 h-8 text-crops-400" />
+                                <h3 className="text-3xl md:text-4xl font-extrabold mb-5 flex items-center gap-4">
+                                    <div className="p-3 bg-white/20 rounded-2xl backdrop-blur-sm">
+                                        <MessageSquare className="w-9 h-9 text-white" />
+                                    </div>
                                     {t('result.chatCtaTitle')}
                                 </h3>
-                                <p className="text-earth-300 text-lg max-w-xl">
-                                    {t('result.chatCtaDesc')}
+                                <p className="text-green-100 text-xl max-w-xl leading-relaxed">
+                                    💬 {t('result.chatCtaDesc')}
                                 </p>
                             </div>
                             <Link
                                 to="/chatbot"
-                                className="inline-flex items-center gap-2 px-8 py-4 bg-crops-600 hover:bg-crops-700 text-white font-bold text-lg rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1 whitespace-nowrap"
+                                className="inline-flex items-center gap-3 px-10 py-5 bg-white text-green-700 hover:bg-green-50 font-bold text-xl rounded-2xl transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1 whitespace-nowrap"
                             >
                                 {t('result.chatCtaButton')}
-                                <ArrowRight className="w-5 h-5" />
+                                <ArrowRight className="w-6 h-6" />
                             </Link>
                         </div>
                     </section>
